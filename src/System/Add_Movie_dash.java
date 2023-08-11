@@ -53,7 +53,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         JCheckBox_ShowingTimes_1030AM = new javax.swing.JCheckBox();
         jLabel16 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        JBTN_Update = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         JComboBox_Content_Rating = new javax.swing.JComboBox<>();
         JCheckBox_ShowingTimes_0130PM = new javax.swing.JCheckBox();
@@ -230,9 +230,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel16.setText("Showing Times");
         jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 730, -1, -1));
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton1.setText("UPDATE");
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 580, 130, 40));
+        JBTN_Update.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        JBTN_Update.setText("UPDATE");
+        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 580, 130, 40));
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setText("DELETE");
@@ -431,6 +431,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     private javax.swing.JLabel BG;
     private javax.swing.JButton JBTN_Add_Movie;
     private javax.swing.JButton JBTN_RefreshTable;
+    private javax.swing.JButton JBTN_Update;
     private javax.swing.JCheckBox JCheckBox_HallNo_1;
     private javax.swing.JCheckBox JCheckBox_HallNo_2;
     private javax.swing.JCheckBox JCheckBox_HallNo_3;
@@ -456,7 +457,6 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     private javax.swing.JTextField JTF_Year;
     private javax.swing.JTextArea JTextArea_Cast;
     private javax.swing.JTextArea JTextArea_Description;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
