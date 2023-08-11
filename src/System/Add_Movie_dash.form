@@ -210,8 +210,8 @@
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                   <Table columnCount="2" rowCount="4">
-                    <Column editable="false" title="Movie Name" type="java.lang.Object"/>
-                    <Column editable="false" title="Cinema Hall No" type="java.lang.Object"/>
+                    <Column editable="false" title="movie_name_db" type="java.lang.Object"/>
+                    <Column editable="false" title="Hall_No_db" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">

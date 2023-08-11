@@ -10,6 +10,9 @@ import java.util.*;
 import java.sql.*;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import javax.swing.table.DefaultTableModel;
+
+
 
 
 
@@ -17,6 +20,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
     public Add_Movie_dash() {
         initComponents();
+        
+    loadMoviesIntoTable();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -136,7 +142,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 {null, null}
             },
             new String [] {
-                "Movie Name", "Cinema Hall No"
+                "movie_name_db", "Hall_No_db"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -551,6 +557,43 @@ if (!isTimeSelected) {
 }
     
     }//GEN-LAST:event_JBTN_Add_MovieActionPerformed
+
+    private void loadMoviesIntoTable() {
+    Connection conn = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+    DefaultTableModel model = null;
+
+    try {
+        // Step 1: Establish a connection
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_db", "root", "");
+
+        // Step 2: Retrieve the data
+        String query = "SELECT movie_name_db, Hall_No_db FROM all_movies_db";
+        pst = conn.prepareStatement(query);
+        rs = pst.executeQuery();
+
+        // Step 3: Populate the JTable
+        model = (DefaultTableModel) JTable1.getModel();
+        model.setRowCount(0); // Clear the current data
+
+        while (rs.next()) {
+            String movieName = rs.getString("movie_name_db");
+            String hallNo = rs.getString("Hall_No_db");
+            model.addRow(new Object[]{movieName, hallNo});
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (pst != null) pst.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+}
 
     private void JComboBox_CountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JComboBox_CountryActionPerformed
         // TODO add your handling code here:
