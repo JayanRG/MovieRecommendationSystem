@@ -61,7 +61,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCheckBox_ShowingTimes_0730PM = new javax.swing.JCheckBox();
         JCheckBox_ShowingTimes_1030PM = new javax.swing.JCheckBox();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        JBTN_RefreshTable = new javax.swing.JButton();
         JCheckBox_HallNo_1 = new javax.swing.JCheckBox();
         JCheckBox_HallNo_2 = new javax.swing.JCheckBox();
         JCheckBox_HallNo_3 = new javax.swing.JCheckBox();
@@ -271,9 +271,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jButton3.setText("CLEAR FIELDS");
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 680, -1, -1));
 
-        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton4.setText("REFRESH TABLE");
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 480, 140, 30));
+        JBTN_RefreshTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        JBTN_RefreshTable.setText("REFRESH TABLE");
+        jPanel1.add(JBTN_RefreshTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 480, 140, 30));
 
         JCheckBox_HallNo_1.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_1.setText("1");
@@ -430,6 +430,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BG;
     private javax.swing.JButton JBTN_Add_Movie;
+    private javax.swing.JButton JBTN_RefreshTable;
     private javax.swing.JCheckBox JCheckBox_HallNo_1;
     private javax.swing.JCheckBox JCheckBox_HallNo_2;
     private javax.swing.JCheckBox JCheckBox_HallNo_3;
@@ -458,7 +459,6 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
