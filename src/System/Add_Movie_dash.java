@@ -70,7 +70,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCheckBox_ShowingTimes_1030AM = new javax.swing.JCheckBox();
         jLabel16 = new javax.swing.JLabel();
         JBTN_Update = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        JBTN_Delete = new javax.swing.JButton();
         JComboBox_Content_Rating = new javax.swing.JComboBox<>();
         JCheckBox_ShowingTimes_0130PM = new javax.swing.JCheckBox();
         JCheckBox_ShowingTimes_0430PM = new javax.swing.JCheckBox();
@@ -138,6 +138,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel6.setText("Genre");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 150, 50, 20));
 
+        JTable1.setBackground(new java.awt.Color(0, 0, 0));
+        JTable1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        JTable1.setForeground(new java.awt.Color(255, 255, 255));
         JTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -168,7 +171,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
             JTable1.getColumnModel().getColumn(1).setResizable(false);
         }
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 380, 400));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 20, 380, 630));
 
         JTextArea_Cast.setColumns(20);
         JTextArea_Cast.setRows(5);
@@ -261,9 +264,14 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         });
         jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 530, 130, 40));
 
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jButton2.setText("DELETE");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 580, 130, 40));
+        JBTN_Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        JBTN_Delete.setText("DELETE");
+        JBTN_Delete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_DeleteActionPerformed(evt);
+            }
+        });
+        jPanel1.add(JBTN_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 580, 130, 40));
 
         JComboBox_Content_Rating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "G", "PG", "R" }));
         jPanel1.add(JComboBox_Content_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 230, 120, -1));
@@ -303,14 +311,16 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         });
         jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 510, -1, -1));
 
+        JBTN_RefreshTable.setBackground(new java.awt.Color(0, 0, 0));
         JBTN_RefreshTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        JBTN_RefreshTable.setForeground(new java.awt.Color(255, 255, 255));
         JBTN_RefreshTable.setText("REFRESH TABLE");
         JBTN_RefreshTable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBTN_RefreshTableActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_RefreshTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 380, 30));
+        jPanel1.add(JBTN_RefreshTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 660, 380, 30));
 
         JCheckBox_HallNo_1.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_1.setText("1");
@@ -966,6 +976,57 @@ if (!isTimeSelected) {
         populateFieldsWithMovieDetails(movieName);
     }//GEN-LAST:event_JTable1MouseClicked
 
+    private void JBTN_DeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_DeleteActionPerformed
+                                          
+    // Get the movie name from the field
+    String movieName = JTF_Movie_Name.getText();
+
+    // Check if movieName is empty
+    if (movieName.isEmpty()) {
+        JOptionPane.showMessageDialog(null, "No movie selected for deletion.");
+        return;
+    }
+
+    // Confirm delete action from the user
+    int confirmDelete = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete this movie?", "Confirm Deletion", JOptionPane.YES_NO_OPTION);
+    if (confirmDelete == JOptionPane.NO_OPTION) {
+        return;
+    }
+
+    Connection conn = null;
+    PreparedStatement pst = null;
+
+    try {
+        // Connect to the database
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_db", "root", "");
+
+        // Create the DELETE SQL statement
+        String query = "DELETE FROM all_movies_db WHERE movie_name_db = ?";
+        pst = conn.prepareStatement(query);
+        pst.setString(1, movieName);
+
+        // Execute the DELETE statement
+        int result = pst.executeUpdate();
+        if (result > 0) {
+            JOptionPane.showMessageDialog(null, "Movie Deleted Successfully!");
+            clearFields();  // Clear the fields
+            loadMoviesIntoTable();  // Refresh the JTable1 with updated data
+        } else {
+            JOptionPane.showMessageDialog(null, "Error deleting movie.");
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e);
+    } finally {
+        try {
+            if (pst != null) pst.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    }//GEN-LAST:event_JBTN_DeleteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1005,6 +1066,7 @@ if (!isTimeSelected) {
     private javax.swing.JLabel BG;
     private javax.swing.JButton JBTN_Add_Movie;
     private javax.swing.JButton JBTN_CLR_Fields;
+    private javax.swing.JButton JBTN_Delete;
     private javax.swing.JButton JBTN_RefreshTable;
     private javax.swing.JButton JBTN_Update;
     private javax.swing.JCheckBox JCheckBox_HallNo_1;
@@ -1033,7 +1095,6 @@ if (!isTimeSelected) {
     private javax.swing.JTable JTable1;
     private javax.swing.JTextArea JTextArea_Cast;
     private javax.swing.JTextArea JTextArea_Description;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
