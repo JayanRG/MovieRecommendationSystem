@@ -359,6 +359,146 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private boolean validateMovieFields() {
+
+    // Validation for Movie Name (Should be unique - but this check is only for adding movies)
+    if (JTF_Movie_Name.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Movie name cannot be empty.");
+        return false;
+    }
+
+    // Validation for Movie Year (Should be current year + 3 or below)
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    int enteredYear;
+    try {
+        enteredYear = Integer.parseInt(JTF_Year.getText());
+        if (enteredYear > currentYear + 3 || enteredYear < currentYear) {
+            JOptionPane.showMessageDialog(null, "Invalid movie year. It should be between " + currentYear + " and " + (currentYear + 3) + ".");
+            return false;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Invalid movie year format.");
+        return false;
+    }
+
+    // Validation for Movie Genre (Cannot be empty)
+    if (JTF_Genre.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Genre cannot be empty.");
+        return false;
+    }
+
+    // Validation for Movie Description (Should be more than 4 characters)
+    if (JTextArea_Description.getText().trim().length() <= 4) {
+        JOptionPane.showMessageDialog(null, "Description should be more than 4 characters.");
+        return false;
+    }
+
+    // Validation for Movie Rating (Should be between 0 and 10)
+    try {
+        float rating = Float.parseFloat(JTF_Rating.getText());
+        if (rating < 0 || rating > 10) {
+            JOptionPane.showMessageDialog(null, "Rating should be between 0 and 10.");
+            return false;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Invalid movie rating format.");
+        return false;
+    }
+
+    // Validation for Movie Cast (Should be in the format: Name1, Name2, Name3)
+    String[] castNames = JTextArea_Cast.getText().split(",");
+    if (castNames.length < 1) {
+        JOptionPane.showMessageDialog(null, "Wrong cast name format. Please use the format: Name1, Name2, Name3");
+        return false;
+    }
+
+    // Validation for IMDb Rating (Should be between 0 and 10)
+    try {
+        float imdbRating = Float.parseFloat(JTF_IMDb_Rating.getText());
+        if (imdbRating < 0 || imdbRating > 10) {
+            JOptionPane.showMessageDialog(null, "IMDb Rating should be between 0 and 10.");
+            return false;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Invalid IMDb rating format.");
+        return false;
+    }
+
+    // Validation for Rotten Tomatoes Rating (Should be between 0% and 100%)
+    try {
+        int rottenRating = Integer.parseInt(JTF_Rotten_Tomatoes.getText().replace("%", ""));
+        if (rottenRating < 0 || rottenRating > 100) {
+            JOptionPane.showMessageDialog(null, "Rotten Tomatoes rating should be between 0% and 100%.");
+            return false;
+        }
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Invalid Rotten Tomatoes rating format.");
+        return false;
+    }
+
+    // Validation for Director Name (Cannot be empty)
+    if (JTF_Director.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Director name cannot be empty.");
+        return false;
+    }
+
+    // Validation for Composer Name (Cannot be empty)
+    if (JTF_Composer.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Composer name cannot be empty.");
+        return false;
+    }
+
+    // Validation for Content Rating (Should be G, PG or R. "NOT SELECTED" is not applicable)
+    String contentRating = JComboBox_Content_Rating.getSelectedItem().toString();
+    if ("NOT SELECTED".equals(contentRating) || !(contentRating.equals("G") || contentRating.equals("PG") || contentRating.equals("R"))) {
+        JOptionPane.showMessageDialog(null, "Select Content Rating (G, PG or R only).");
+        return false;
+    }
+
+    // Validation for Country (Should be selected from the list, "NOT SELECTED" is not applicable)
+    String country = JComboBox_Country.getSelectedItem().toString();
+    if ("NOT SELECTED".equals(country)) {
+        JOptionPane.showMessageDialog(null, "Select a Country.");
+        return false;
+    }
+
+    // Validation for Movie Quality (Should be Digital 2D, Digital 3D or DOLBY ATMOS. "NOT SELECTED" is not applicable)
+    String quality = JComboBox_Quality.getSelectedItem().toString();
+    if ("NOT SELECTED".equals(quality)) {
+        JOptionPane.showMessageDialog(null, "Select Movie Quality.");
+        return false;
+    }
+
+    // Validation for Duration (Should be in HH:MM format)
+    Pattern pattern = Pattern.compile("^([01]?[0-9]|2[0-3]):[0-5][0-9]$");
+    Matcher matcher = pattern.matcher(JTF_Duration.getText());
+    if (!matcher.matches()) {
+        JOptionPane.showMessageDialog(null, "Invalid duration format. It should be in HH:MM format.");
+        return false;
+    }
+
+    // Validation for Hall No (At least one should be selected)
+    boolean isHallSelected = JCheckBox_HallNo_1.isSelected() || JCheckBox_HallNo_2.isSelected() || JCheckBox_HallNo_3.isSelected() || 
+                             JCheckBox_HallNo_4.isSelected() || JCheckBox_HallNo_5.isSelected() || JCheckBox_HallNo_6.isSelected();
+    if (!isHallSelected) {
+        JOptionPane.showMessageDialog(null, "Select at least one Hall.");
+        return false;
+    }
+
+    // Validation for Showing Times (At least one should be selected)
+    boolean isTimeSelected = JCheckBox_ShowingTimes_1030AM.isSelected() || JCheckBox_ShowingTimes_0130PM.isSelected() || 
+                             JCheckBox_ShowingTimes_0430PM.isSelected() || JCheckBox_ShowingTimes_0730PM.isSelected() || 
+                             JCheckBox_ShowingTimes_1030PM.isSelected();
+    if (!isTimeSelected) {
+        JOptionPane.showMessageDialog(null, "Select at least one Showing Time.");
+        return false;
+    }
+
+    return true;
+}
+
+    
+    
     private void JBTN_Add_MovieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_Add_MovieActionPerformed
     // Database connection setup
     Connection conn = null;
@@ -649,7 +789,10 @@ if (!isTimeSelected) {
                 switch(hall.trim()) {
                     case "1": JCheckBox_HallNo_1.setSelected(true); break;
                     case "2": JCheckBox_HallNo_2.setSelected(true); break;
-                    // ... repeat for all checkboxes ...
+                    case "3": JCheckBox_HallNo_3.setSelected(true); break;
+                    case "4": JCheckBox_HallNo_4.setSelected(true); break;
+                    case "5": JCheckBox_HallNo_5.setSelected(true); break;
+                    case "6": JCheckBox_HallNo_6.setSelected(true); break;
                 }
             }
 
@@ -664,7 +807,9 @@ if (!isTimeSelected) {
                 switch(time.trim()) {
                     case "10:30 AM": JCheckBox_ShowingTimes_1030AM.setSelected(true); break;
                     case "01:30 PM": JCheckBox_ShowingTimes_0130PM.setSelected(true); break;
-                    // ... repeat for all checkboxes ...
+                    case "04:30 PM": JCheckBox_ShowingTimes_0430PM.setSelected(true); break;
+                    case "07:30 PM": JCheckBox_ShowingTimes_0730PM.setSelected(true); break;
+                    case "10:30 PM": JCheckBox_ShowingTimes_1030PM.setSelected(true); break;
                 }
             }
         }
@@ -733,7 +878,78 @@ if (!isTimeSelected) {
     }//GEN-LAST:event_JCheckBox_ShowingTimes_0430PMActionPerformed
 
     private void JBTN_UpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_UpdateActionPerformed
-        // TODO add your handling code here:
+        // Call the validateMovieFields method
+    if (!validateMovieFields()) {
+        return; // Exit if validation fails
+    }
+
+    Connection conn = null;
+    PreparedStatement pst = null;
+
+    try {
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_db", "root", "");
+        
+        String query = "UPDATE all_movies_db SET mov_year_db=?, mov_genre_db=?, mov_descrip_db=?, mov_rating_db=?, Cast_db=?, IMDb_Rating_db=?, Rotten_Tomatos_db=?, Director_db=?, Music_composed_by_db=?, Content_Rating_db=?, Country_db=?, Quality_db=?, Duration_db=?, Hall_No_db=?, Showing_Times_db=? WHERE movie_name_db=?";
+        pst = conn.prepareStatement(query);
+
+        pst.setInt(1, Integer.parseInt(JTF_Year.getText()));
+        pst.setString(2, JTF_Genre.getText());
+        pst.setString(3, JTextArea_Description.getText());
+        pst.setFloat(4, Float.parseFloat(JTF_Rating.getText()));
+        pst.setString(5, JTextArea_Cast.getText());
+        pst.setFloat(6, Float.parseFloat(JTF_IMDb_Rating.getText()));
+        pst.setInt(7, Integer.parseInt(JTF_Rotten_Tomatoes.getText().replace("%", "")));
+        pst.setString(8, JTF_Director.getText());
+        pst.setString(9, JTF_Composer.getText());
+        pst.setString(10, JComboBox_Content_Rating.getSelectedItem().toString());
+        pst.setString(11, JComboBox_Country.getSelectedItem().toString());
+        pst.setString(12, JComboBox_Quality.getSelectedItem().toString());
+        pst.setString(13, JTF_Duration.getText());
+
+        
+        // For Hall Numbers
+        StringBuilder hallNumbers = new StringBuilder();
+        if(JCheckBox_HallNo_1.isSelected()) hallNumbers.append("1,");
+        if(JCheckBox_HallNo_2.isSelected()) hallNumbers.append("2,");
+        if(JCheckBox_HallNo_3.isSelected()) hallNumbers.append("3,");
+        if(JCheckBox_HallNo_4.isSelected()) hallNumbers.append("4,");
+        if(JCheckBox_HallNo_5.isSelected()) hallNumbers.append("5,");
+        if(JCheckBox_HallNo_6.isSelected()) hallNumbers.append("6,");
+        if(hallNumbers.length() > 0) hallNumbers.setLength(hallNumbers.length() - 1); // Remove last comma
+        pst.setString(14, hallNumbers.toString());
+
+        // For Showing Times
+        StringBuilder showingTimes = new StringBuilder();
+        if (JCheckBox_ShowingTimes_1030AM.isSelected()) showingTimes.append("10:30 AM,");
+        if (JCheckBox_ShowingTimes_0130PM.isSelected()) showingTimes.append("01:30 PM,");
+        if (JCheckBox_ShowingTimes_0430PM.isSelected()) showingTimes.append("04:30 PM,");
+        if (JCheckBox_ShowingTimes_0730PM.isSelected()) showingTimes.append("07:30 PM,");
+        if (JCheckBox_ShowingTimes_1030PM.isSelected()) showingTimes.append("10:30 PM,");
+        if (showingTimes.length() > 0) showingTimes.setLength(showingTimes.length() - 1); // Remove last comma
+        pst.setString(15, showingTimes.toString());
+
+
+        pst.setString(16, JTF_Movie_Name.getText());
+
+
+        int result = pst.executeUpdate();
+        if (result > 0) {
+            JOptionPane.showMessageDialog(null, "Movie Updated Successfully!");
+            clearFields();
+            loadMoviesIntoTable();
+        } else {
+            JOptionPane.showMessageDialog(null, "Error updating movie.");
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, e);
+    } finally {
+        try {
+            if (pst != null) pst.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
     }//GEN-LAST:event_JBTN_UpdateActionPerformed
 
     private void JBTN_CLR_FieldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_CLR_FieldsActionPerformed
