@@ -12,18 +12,22 @@ import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import javax.swing.table.DefaultTableModel;
 
-
-
-
-
 public class Add_Movie_dash extends javax.swing.JFrame {
 
     public Add_Movie_dash() {
         initComponents();
         
     loadMoviesIntoTable();
+    
+    JTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        JTable1MouseClicked(evt);
+    }
+});
+
 
     }
+    
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -72,7 +76,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCheckBox_ShowingTimes_0430PM = new javax.swing.JCheckBox();
         JCheckBox_ShowingTimes_0730PM = new javax.swing.JCheckBox();
         JCheckBox_ShowingTimes_1030PM = new javax.swing.JCheckBox();
-        jButton3 = new javax.swing.JButton();
+        JBTN_CLR_Fields = new javax.swing.JButton();
         JBTN_RefreshTable = new javax.swing.JButton();
         JCheckBox_HallNo_1 = new javax.swing.JCheckBox();
         JCheckBox_HallNo_2 = new javax.swing.JCheckBox();
@@ -97,7 +101,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_Add_MovieActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 440, 130, 40));
+        jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 480, 130, 40));
         jPanel1.add(JTF_Movie_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 60, 260, 30));
         jPanel1.add(JTF_Year, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 100, 100, 30));
         jPanel1.add(JTF_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 260, 80, 30));
@@ -151,6 +155,11 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
+            }
+        });
+        JTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTable1MouseClicked(evt);
             }
         });
         jScrollPane2.setViewportView(JTable1);
@@ -250,11 +259,11 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_UpdateActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 490, 130, 40));
+        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 530, 130, 40));
 
         jButton2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jButton2.setText("DELETE");
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 540, 130, 40));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 580, 130, 40));
 
         JComboBox_Content_Rating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "G", "PG", "R" }));
         jPanel1.add(JComboBox_Content_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 230, 120, -1));
@@ -285,13 +294,23 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCheckBox_ShowingTimes_1030PM.setText("10:30 PM");
         jPanel1.add(JCheckBox_ShowingTimes_1030PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 470, -1, -1));
 
-        jButton3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jButton3.setText("CLEAR FIELDS");
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 590, -1, -1));
+        JBTN_CLR_Fields.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        JBTN_CLR_Fields.setText("CLEAR FIELDS");
+        JBTN_CLR_Fields.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_CLR_FieldsActionPerformed(evt);
+            }
+        });
+        jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 510, -1, -1));
 
         JBTN_RefreshTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JBTN_RefreshTable.setText("REFRESH TABLE");
-        jPanel1.add(JBTN_RefreshTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 620, 140, 30));
+        JBTN_RefreshTable.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_RefreshTableActionPerformed(evt);
+            }
+        });
+        jPanel1.add(JBTN_RefreshTable, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 430, 380, 30));
 
         JCheckBox_HallNo_1.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_1.setText("1");
@@ -541,6 +560,9 @@ if (!isTimeSelected) {
         int result = pst.executeUpdate();
         if(result > 0) {
             JOptionPane.showMessageDialog(null, "Movie Added Successfully!");
+            clearFields();  // Clear the fields after successfully adding the movie
+            loadMoviesIntoTable();  // Refresh the JTable1 with updated data
+
         } else {
             JOptionPane.showMessageDialog(null, "Error adding movie.");
         }
@@ -558,6 +580,109 @@ if (!isTimeSelected) {
     
     }//GEN-LAST:event_JBTN_Add_MovieActionPerformed
 
+    private void clearFields() {
+    JTF_Movie_Name.setText("");
+    JTF_Year.setText("");
+    JTF_Genre.setText("");
+    JTextArea_Description.setText("");
+    JTF_Rating.setText("");
+    JTextArea_Cast.setText("");
+    JTF_IMDb_Rating.setText("");
+    JTF_Rotten_Tomatoes.setText("");
+    JTF_Director.setText("");
+    JTF_Composer.setText("");
+    JComboBox_Content_Rating.setSelectedIndex(0);  
+    JComboBox_Country.setSelectedIndex(0);        
+    JComboBox_Quality.setSelectedIndex(0);       
+    JTF_Duration.setText("");
+    JCheckBox_HallNo_1.setSelected(false);
+    JCheckBox_HallNo_2.setSelected(false);
+    JCheckBox_HallNo_3.setSelected(false);
+    JCheckBox_HallNo_4.setSelected(false);
+    JCheckBox_HallNo_5.setSelected(false);
+    JCheckBox_HallNo_6.setSelected(false);
+    JCheckBox_ShowingTimes_1030AM.setSelected(false);
+    JCheckBox_ShowingTimes_0130PM.setSelected(false);
+    JCheckBox_ShowingTimes_0430PM.setSelected(false);
+    JCheckBox_ShowingTimes_0730PM.setSelected(false);
+    JCheckBox_ShowingTimes_1030PM.setSelected(false);
+}
+
+    
+    
+    //populate movie details from table to fields
+    private void populateFieldsWithMovieDetails(String movieName) {
+    Connection conn = null;
+    PreparedStatement pst = null;
+    ResultSet rs = null;
+
+    try {
+        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/movie_db", "root", "");
+        String query = "SELECT * FROM all_movies_db WHERE movie_name_db = ?";
+        pst = conn.prepareStatement(query);
+        pst.setString(1, movieName);
+        rs = pst.executeQuery();
+        
+        if(rs.next()) {
+            JTF_Movie_Name.setText(rs.getString("movie_name_db"));
+            JTF_Year.setText(rs.getString("mov_year_db"));
+            JTF_Genre.setText(rs.getString("mov_genre_db"));
+            JTextArea_Description.setText(rs.getString("mov_descrip_db"));
+            JTF_Rating.setText(rs.getString("mov_rating_db"));
+            JTextArea_Cast.setText(rs.getString("Cast_db"));
+            JTF_IMDb_Rating.setText(rs.getString("IMDb_Rating_db"));
+            JTF_Rotten_Tomatoes.setText(rs.getString("Rotten_Tomatos_db") + "%");
+            JTF_Director.setText(rs.getString("Director_db"));
+            JTF_Composer.setText(rs.getString("Music_composed_by_db"));
+            JComboBox_Content_Rating.setSelectedItem(rs.getString("Content_Rating_db"));
+            JComboBox_Country.setSelectedItem(rs.getString("Country_db"));
+            JComboBox_Quality.setSelectedItem(rs.getString("Quality_db"));
+            JTF_Duration.setText(rs.getString("Duration_db"));
+
+            // Clear all checkboxes first
+            JCheckBox_HallNo_1.setSelected(false);
+            JCheckBox_HallNo_2.setSelected(false);
+            // ... repeat for all checkboxes ...
+
+            String[] halls = rs.getString("Hall_No_db").split(",");
+            for(String hall : halls) {
+                switch(hall.trim()) {
+                    case "1": JCheckBox_HallNo_1.setSelected(true); break;
+                    case "2": JCheckBox_HallNo_2.setSelected(true); break;
+                    // ... repeat for all checkboxes ...
+                }
+            }
+
+            // Do the same for showing times
+            // Clear all checkboxes first
+            JCheckBox_ShowingTimes_1030AM.setSelected(false);
+            JCheckBox_ShowingTimes_0130PM.setSelected(false);
+            // ... repeat for all checkboxes ...
+
+            String[] times = rs.getString("Showing_Times_db").split(",");
+            for(String time : times) {
+                switch(time.trim()) {
+                    case "10:30 AM": JCheckBox_ShowingTimes_1030AM.setSelected(true); break;
+                    case "01:30 PM": JCheckBox_ShowingTimes_0130PM.setSelected(true); break;
+                    // ... repeat for all checkboxes ...
+                }
+            }
+        }
+        
+    } catch(SQLException e) {
+        JOptionPane.showMessageDialog(null, e);
+    } finally {
+        try {
+            if(rs != null) rs.close();
+            if(pst != null) pst.close();
+            if(conn != null) conn.close();
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+}
+
+    
     private void loadMoviesIntoTable() {
     Connection conn = null;
     PreparedStatement pst = null;
@@ -611,6 +736,20 @@ if (!isTimeSelected) {
         // TODO add your handling code here:
     }//GEN-LAST:event_JBTN_UpdateActionPerformed
 
+    private void JBTN_CLR_FieldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_CLR_FieldsActionPerformed
+        clearFields();  // Call the clearFields() method to reset the components to their default states
+    }//GEN-LAST:event_JBTN_CLR_FieldsActionPerformed
+
+    private void JBTN_RefreshTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_RefreshTableActionPerformed
+        loadMoviesIntoTable();  // Refresh the JTable1 with updated data
+    }//GEN-LAST:event_JBTN_RefreshTableActionPerformed
+
+    private void JTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTable1MouseClicked
+        int selectedRow = JTable1.getSelectedRow();
+        String movieName = JTable1.getValueAt(selectedRow, 0).toString(); // Assuming movie name is in column 0
+        populateFieldsWithMovieDetails(movieName);
+    }//GEN-LAST:event_JTable1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -649,6 +788,7 @@ if (!isTimeSelected) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BG;
     private javax.swing.JButton JBTN_Add_Movie;
+    private javax.swing.JButton JBTN_CLR_Fields;
     private javax.swing.JButton JBTN_RefreshTable;
     private javax.swing.JButton JBTN_Update;
     private javax.swing.JCheckBox JCheckBox_HallNo_1;
@@ -678,7 +818,6 @@ if (!isTimeSelected) {
     private javax.swing.JTextArea JTextArea_Cast;
     private javax.swing.JTextArea JTextArea_Description;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
