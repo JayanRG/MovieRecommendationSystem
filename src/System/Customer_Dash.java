@@ -27,21 +27,99 @@ public class Customer_Dash extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        JLB_MOVIE4_Image = new javax.swing.JLabel();
+        JLB_MOVIE3_Image = new javax.swing.JLabel();
+        JLB_MOVIE2_Image = new javax.swing.JLabel();
+        JLB_MOVIE1_Image = new javax.swing.JLabel();
+        JLB_MOVIE1_Name = new javax.swing.JLabel();
+        JLB_MOVIE2_Name = new javax.swing.JLabel();
+        JLB_MOVIE3_Name = new javax.swing.JLabel();
+        JLB_MOVIE4_Name = new javax.swing.JLabel();
+        JLB_MOVIE1_YearGenre = new javax.swing.JLabel();
+        JLB_MOVIE2_YearGenre = new javax.swing.JLabel();
+        JLB_MOVIE3_YearGenre = new javax.swing.JLabel();
+        JLB_MOVIE4_YearGenre = new javax.swing.JLabel();
+        JLB_MOVIE1_Rating = new javax.swing.JLabel();
+        JLB_MOVIE2_Rating = new javax.swing.JLabel();
+        JLB_MOVIE3_Rating = new javax.swing.JLabel();
+        JLB_MOVIE4_Rating = new javax.swing.JLabel();
+        JLB_MOVIE1_WatchStatus = new javax.swing.JComboBox<>();
+        JLB_MOVIE2_WatchStatus = new javax.swing.JComboBox<>();
+        JLB_MOVIE3_WatchStatus = new javax.swing.JComboBox<>();
+        JLB_MOVIE4_WatchStatus = new javax.swing.JComboBox<>();
+        Background_Image = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setMinimumSize(new java.awt.Dimension(1392, 768));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Customer DASH");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 400, -1, -1));
+        JLB_MOVIE4_Image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jPanel1.add(JLB_MOVIE4_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 40, 220, 270));
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/MovieMavenBG.jpg"))); // NOI18N
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        JLB_MOVIE3_Image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jPanel1.add(JLB_MOVIE3_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 220, 270));
+
+        JLB_MOVIE2_Image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jPanel1.add(JLB_MOVIE2_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 220, 270));
+
+        JLB_MOVIE1_Image.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white, java.awt.Color.white));
+        jPanel1.add(JLB_MOVIE1_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 40, 220, 270));
+
+        JLB_MOVIE1_Name.setText("jLabel1");
+        jPanel1.add(JLB_MOVIE1_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 320, 120, 30));
+
+        JLB_MOVIE2_Name.setText("jLabel6");
+        jPanel1.add(JLB_MOVIE2_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 320, 120, 30));
+
+        JLB_MOVIE3_Name.setText("jLabel7");
+        jPanel1.add(JLB_MOVIE3_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 320, 120, 30));
+
+        JLB_MOVIE4_Name.setText("jLabel8");
+        jPanel1.add(JLB_MOVIE4_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 320, 120, 30));
+
+        JLB_MOVIE1_YearGenre.setText("jLabel9");
+        jPanel1.add(JLB_MOVIE1_YearGenre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 350, 200, 30));
+
+        JLB_MOVIE2_YearGenre.setText("jLabel10");
+        jPanel1.add(JLB_MOVIE2_YearGenre, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 350, 210, 30));
+
+        JLB_MOVIE3_YearGenre.setText("jLabel11");
+        jPanel1.add(JLB_MOVIE3_YearGenre, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 350, 210, 30));
+
+        JLB_MOVIE4_YearGenre.setText("jLabel12");
+        jPanel1.add(JLB_MOVIE4_YearGenre, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 350, 210, 30));
+
+        JLB_MOVIE1_Rating.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        JLB_MOVIE1_Rating.setText("jLabel13");
+        jPanel1.add(JLB_MOVIE1_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 380, 200, 30));
+
+        JLB_MOVIE2_Rating.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        JLB_MOVIE2_Rating.setText("jLabel14");
+        jPanel1.add(JLB_MOVIE2_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 380, 200, 30));
+
+        JLB_MOVIE3_Rating.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        JLB_MOVIE3_Rating.setText("jLabel15");
+        jPanel1.add(JLB_MOVIE3_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 380, 200, 30));
+
+        JLB_MOVIE4_Rating.setFont(new java.awt.Font("Segoe UI", 0, 8)); // NOI18N
+        JLB_MOVIE4_Rating.setText("jLabel16");
+        jPanel1.add(JLB_MOVIE4_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 380, 200, 30));
+
+        JLB_MOVIE1_WatchStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Not Watched", "Watched" }));
+        jPanel1.add(JLB_MOVIE1_WatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 320, -1, -1));
+
+        JLB_MOVIE2_WatchStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Not Watched", "Watched" }));
+        jPanel1.add(JLB_MOVIE2_WatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 320, -1, -1));
+
+        JLB_MOVIE3_WatchStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Not Watched", "Watched" }));
+        jPanel1.add(JLB_MOVIE3_WatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 320, -1, -1));
+
+        JLB_MOVIE4_WatchStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Not Watched", "Watched" }));
+        jPanel1.add(JLB_MOVIE4_WatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 320, -1, -1));
+
+        Background_Image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Blue BG.jpg"))); // NOI18N
+        jPanel1.add(Background_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -93,8 +171,27 @@ public class Customer_Dash extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel Background_Image;
+    private javax.swing.JLabel JLB_MOVIE1_Image;
+    private javax.swing.JLabel JLB_MOVIE1_Name;
+    private javax.swing.JLabel JLB_MOVIE1_Rating;
+    private javax.swing.JComboBox<String> JLB_MOVIE1_WatchStatus;
+    private javax.swing.JLabel JLB_MOVIE1_YearGenre;
+    private javax.swing.JLabel JLB_MOVIE2_Image;
+    private javax.swing.JLabel JLB_MOVIE2_Name;
+    private javax.swing.JLabel JLB_MOVIE2_Rating;
+    private javax.swing.JComboBox<String> JLB_MOVIE2_WatchStatus;
+    private javax.swing.JLabel JLB_MOVIE2_YearGenre;
+    private javax.swing.JLabel JLB_MOVIE3_Image;
+    private javax.swing.JLabel JLB_MOVIE3_Name;
+    private javax.swing.JLabel JLB_MOVIE3_Rating;
+    private javax.swing.JComboBox<String> JLB_MOVIE3_WatchStatus;
+    private javax.swing.JLabel JLB_MOVIE3_YearGenre;
+    private javax.swing.JLabel JLB_MOVIE4_Image;
+    private javax.swing.JLabel JLB_MOVIE4_Name;
+    private javax.swing.JLabel JLB_MOVIE4_Rating;
+    private javax.swing.JComboBox<String> JLB_MOVIE4_WatchStatus;
+    private javax.swing.JLabel JLB_MOVIE4_YearGenre;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
