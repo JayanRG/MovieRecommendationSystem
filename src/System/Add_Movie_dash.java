@@ -1001,6 +1001,7 @@ if (imagePath == null || imagePath.isEmpty()) {
         if(result > 0) {
             JOptionPane.showMessageDialog(null, "Movie Added Successfully!");
             clearFields();  // Clear the fields after successfully adding the movie
+            lblImagePreview.setIcon(null);
             loadMoviesIntoTable();  // Refresh the JTable1 with updated data
 
         } else {
@@ -1067,6 +1068,7 @@ if (imagePath == null || imagePath.isEmpty()) {
     JCheckBox_ShowingTimes_0430PM.setSelected(false);
     JCheckBox_ShowingTimes_0730PM.setSelected(false);
     JCheckBox_ShowingTimes_1030PM.setSelected(false);
+    lblImagePreview.setIcon(null);
 }
 
     //populateGenreCheckboxes
@@ -1352,6 +1354,7 @@ if (imagePath == null || imagePath.isEmpty()) {
         if (result > 0) {
             JOptionPane.showMessageDialog(null, "Movie Updated Successfully!");
             clearFields();
+            lblImagePreview.setIcon(null);
             loadMoviesIntoTable();
         } else {
             JOptionPane.showMessageDialog(null, "Error updating movies."); //this is the code which causes the update error 
@@ -1434,6 +1437,7 @@ if (imagePath == null || imagePath.isEmpty()) {
     */
     private void JBTN_CLR_FieldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_CLR_FieldsActionPerformed
         clearFields();  // Call the clearFields() method to reset the components to their default states
+        lblImagePreview.setIcon(null);
     }//GEN-LAST:event_JBTN_CLR_FieldsActionPerformed
 
     private void JBTN_RefreshTableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_RefreshTableActionPerformed
@@ -1481,6 +1485,7 @@ if (imagePath == null || imagePath.isEmpty()) {
         if (result > 0) {
             JOptionPane.showMessageDialog(null, "Movie Deleted Successfully!");
             clearFields();  // Clear the fields
+            lblImagePreview.setIcon(null);
             loadMoviesIntoTable();  // Refresh the JTable1 with updated data
         } else {
             JOptionPane.showMessageDialog(null, "Error deleting movie.");
