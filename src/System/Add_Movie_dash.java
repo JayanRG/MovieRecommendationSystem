@@ -538,9 +538,8 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jPanel1.add(jCheckBox_GENRE_Western, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 610, -1, -1));
 
         lblImagePreview.setForeground(new java.awt.Color(255, 255, 255));
-        lblImagePreview.setText("        NO IMAGE SELECTED");
         lblImagePreview.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(153, 153, 153)));
-        jPanel1.add(lblImagePreview, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 140, 160, 200));
+        jPanel1.add(lblImagePreview, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 140, 180, 270));
 
         btnChooseImage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnChooseImage.setText("Browse");
@@ -1107,11 +1106,24 @@ if (imagePath == null || imagePath.isEmpty()) {
             JComboBox_Country.setSelectedItem(rs.getString("Country_db"));
             JComboBox_Quality.setSelectedItem(rs.getString("Quality_db"));
             JTF_Duration.setText(rs.getString("Duration_db"));
+            String imagePath = rs.getString("image_path");
+
+           //[Main Image]This checks if the Main Image is empty or not
+            if (imagePath != null && !imagePath.trim().isEmpty()) {
+            ImageIcon icon = new ImageIcon(imagePath);
+            lblImagePreview.setIcon(icon);
+                } else {
+            lblImagePreview.setIcon(null);  // Clear the label if no image is found
+            }
+
 
             // Clear all checkboxes first
             JCheckBox_HallNo_1.setSelected(false);
             JCheckBox_HallNo_2.setSelected(false);
-            // ... repeat for all checkboxes ...
+            JCheckBox_HallNo_3.setSelected(false);
+            JCheckBox_HallNo_4.setSelected(false);
+            JCheckBox_HallNo_5.setSelected(false);
+            JCheckBox_HallNo_6.setSelected(false);
 
             String[] halls = rs.getString("Hall_No_db").split(",");
             for(String hall : halls) {
