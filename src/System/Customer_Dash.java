@@ -141,9 +141,7 @@ public class Customer_Dash extends javax.swing.JFrame {
         
         String sql = "SELECT * FROM all_movies_db LIMIT 4";  // Fetch the first 4 movies for now
         ResultSet rs = stmt.executeQuery(sql);
-        
-        int movieCount = 0;
-        
+                
         // Extract data from result set and populate the movie cards
             while(rs.next()) {
             // Retrieve data from result set
@@ -155,8 +153,7 @@ public class Customer_Dash extends javax.swing.JFrame {
 
             // populate your JLabels
             JLB_MOVIE1_Name.setText(movieName);
-            
-            // ... and so on for other labels (Complete this part)
+
 
             // For the image, you will need to load the image from the path and set it to the JLabel
             ImageIcon imageIcon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(JLB_MOVIE1_Image.getWidth(), JLB_MOVIE1_Image.getHeight(), Image.SCALE_SMOOTH));

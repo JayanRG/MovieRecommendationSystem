@@ -1,5 +1,6 @@
 package System;
 
+//Import Statements
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -18,12 +19,82 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 
 
 public class Add_Movie_dash extends javax.swing.JFrame {
 
     public Add_Movie_dash() {
         initComponents();
+        
+       // if movie is shown in maven cinemas
+       JCB_MavenCinema_Yes.addItemListener(new ItemListener() {
+    public void itemStateChanged(ItemEvent e) {
+        if(e.getStateChange() == ItemEvent.SELECTED) {
+            
+            // Enable all Hall and Time checkboxes
+            JCheckBox_HallNo_1.setEnabled(true);
+            JCheckBox_HallNo_2.setEnabled(true);
+            JCheckBox_HallNo_3.setEnabled(true);
+            JCheckBox_HallNo_4.setEnabled(true);
+            JCheckBox_HallNo_5.setEnabled(true);
+            JCheckBox_HallNo_6.setEnabled(true);
+            JCheckBox_ShowingTimes_1030AM.setEnabled(true);
+            JCheckBox_ShowingTimes_0130PM.setEnabled(true);
+            JCheckBox_ShowingTimes_0430PM.setEnabled(true);
+            JCheckBox_ShowingTimes_0730PM.setEnabled(true);
+            JCheckBox_ShowingTimes_1030PM.setEnabled(true);
+
+            // Unselect and disable the No checkbox
+            JCB_MavenCinema_No.setSelected(false);
+        }
+    }
+});
+        
+        //If Movie is not shown in maven cinemas
+        JCB_MavenCinema_No.addItemListener(new ItemListener() {
+    public void itemStateChanged(ItemEvent e) {
+        // Check or uncheck based on the state of JCB_MavenCinema_No
+        boolean disable = e.getStateChange() == ItemEvent.SELECTED; // True if selected, False otherwise
+
+        // Disable or Enable Hall Number checkboxes
+        JCheckBox_HallNo_1.setEnabled(!disable);
+        JCheckBox_HallNo_2.setEnabled(!disable);
+        JCheckBox_HallNo_3.setEnabled(!disable);
+        JCheckBox_HallNo_4.setEnabled(!disable);
+        JCheckBox_HallNo_5.setEnabled(!disable);
+        JCheckBox_HallNo_6.setEnabled(!disable);
+
+        // Disable or Enable Showing Times checkboxes
+        JCheckBox_ShowingTimes_1030AM.setEnabled(!disable);
+        JCheckBox_ShowingTimes_0130PM.setEnabled(!disable);
+        JCheckBox_ShowingTimes_0430PM.setEnabled(!disable);
+        JCheckBox_ShowingTimes_0730PM.setEnabled(!disable);
+        JCheckBox_ShowingTimes_1030PM.setEnabled(!disable);
+
+        // Clear the checkboxes if they are disabled
+        if(disable) {
+            JCB_MavenCinema_Yes.setSelected(false);
+
+            JCheckBox_HallNo_1.setSelected(false);
+            JCheckBox_HallNo_2.setSelected(false);
+            JCheckBox_HallNo_3.setSelected(false);
+            JCheckBox_HallNo_4.setSelected(false);
+            JCheckBox_HallNo_5.setSelected(false);
+            JCheckBox_HallNo_6.setSelected(false);
+
+            JCheckBox_ShowingTimes_1030AM.setSelected(false);
+            JCheckBox_ShowingTimes_0130PM.setSelected(false);
+            JCheckBox_ShowingTimes_0430PM.setSelected(false);
+            JCheckBox_ShowingTimes_0730PM.setSelected(false);
+            JCheckBox_ShowingTimes_1030PM.setSelected(false);
+        }
+    }
+});
+
+        pack();  // Layout the components in the card(helps to rezie the image to the card)
         
     loadMoviesIntoTable();
     
@@ -116,6 +187,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         btnChooseImage = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         JBTN_Back = new javax.swing.JButton();
+        jLabel19 = new javax.swing.JLabel();
+        JCB_MavenCinema_Yes = new javax.swing.JCheckBox();
+        JCB_MavenCinema_No = new javax.swing.JCheckBox();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -132,7 +206,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_Add_MovieActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 600, 130, 40));
+        jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 580, 130, 40));
 
         JTF_Movie_Name.setBackground(new java.awt.Color(0, 0, 0));
         JTF_Movie_Name.setForeground(new java.awt.Color(255, 255, 255));
@@ -306,16 +380,16 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
         jLabel15.setText("Hall No");
         jLabel15.setToolTipText("");
-        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 700, -1, 30));
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 100, -1, 30));
 
         JCheckBox_ShowingTimes_1030AM.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_ShowingTimes_1030AM.setText("10:30 AM");
-        jPanel1.add(JCheckBox_ShowingTimes_1030AM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 60, -1, -1));
+        jPanel1.add(JCheckBox_ShowingTimes_1030AM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 150, -1, -1));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
         jLabel16.setText("Showing Times");
-        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 60, -1, -1));
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 140, -1, -1));
 
         JBTN_Update.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         JBTN_Update.setText("UPDATE");
@@ -324,7 +398,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_UpdateActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 600, 130, 40));
+        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 580, 130, 40));
 
         JBTN_Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         JBTN_Delete.setText("DELETE");
@@ -333,7 +407,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_DeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 600, 130, 40));
+        jPanel1.add(JBTN_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 580, 130, 40));
 
         JComboBox_Content_Rating.setBackground(new java.awt.Color(0, 0, 0));
         JComboBox_Content_Rating.setForeground(new java.awt.Color(255, 255, 255));
@@ -347,7 +421,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JCheckBox_ShowingTimes_0130PMActionPerformed(evt);
             }
         });
-        jPanel1.add(JCheckBox_ShowingTimes_0130PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 60, -1, -1));
+        jPanel1.add(JCheckBox_ShowingTimes_0130PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1150, 150, -1, -1));
 
         JCheckBox_ShowingTimes_0430PM.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_ShowingTimes_0430PM.setText("04:30 PM");
@@ -356,15 +430,15 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JCheckBox_ShowingTimes_0430PMActionPerformed(evt);
             }
         });
-        jPanel1.add(JCheckBox_ShowingTimes_0430PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 60, -1, -1));
+        jPanel1.add(JCheckBox_ShowingTimes_0430PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1230, 150, -1, -1));
 
         JCheckBox_ShowingTimes_0730PM.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_ShowingTimes_0730PM.setText("07:30 PM");
-        jPanel1.add(JCheckBox_ShowingTimes_0730PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 90, -1, -1));
+        jPanel1.add(JCheckBox_ShowingTimes_0730PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 180, -1, -1));
 
         JCheckBox_ShowingTimes_1030PM.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_ShowingTimes_1030PM.setText("10:30 PM");
-        jPanel1.add(JCheckBox_ShowingTimes_1030PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1170, 90, -1, -1));
+        jPanel1.add(JCheckBox_ShowingTimes_1030PM, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 180, -1, -1));
 
         JBTN_CLR_Fields.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JBTN_CLR_Fields.setText("CLEAR FIELDS");
@@ -373,7 +447,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_CLR_FieldsActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 520, -1, -1));
+        jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 550, -1, -1));
 
         JBTN_RefreshTable.setBackground(new java.awt.Color(0, 0, 0));
         JBTN_RefreshTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -390,7 +464,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCheckBox_HallNo_1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JCheckBox_HallNo_1.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_1.setText("1");
-        jPanel1.add(JCheckBox_HallNo_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 700, 50, 30));
+        jPanel1.add(JCheckBox_HallNo_1, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 100, 50, 30));
 
         JCheckBox_HallNo_2.setBackground(new java.awt.Color(0, 0, 0));
         JCheckBox_HallNo_2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -401,31 +475,31 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JCheckBox_HallNo_2ActionPerformed(evt);
             }
         });
-        jPanel1.add(JCheckBox_HallNo_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 700, 50, 30));
+        jPanel1.add(JCheckBox_HallNo_2, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 100, 50, 30));
 
         JCheckBox_HallNo_3.setBackground(new java.awt.Color(0, 0, 0));
         JCheckBox_HallNo_3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JCheckBox_HallNo_3.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_3.setText("3");
-        jPanel1.add(JCheckBox_HallNo_3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 700, 50, 30));
+        jPanel1.add(JCheckBox_HallNo_3, new org.netbeans.lib.awtextra.AbsoluteConstraints(1140, 100, 50, 30));
 
         JCheckBox_HallNo_4.setBackground(new java.awt.Color(0, 0, 0));
         JCheckBox_HallNo_4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JCheckBox_HallNo_4.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_4.setText("4");
-        jPanel1.add(JCheckBox_HallNo_4, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 700, 50, 30));
+        jPanel1.add(JCheckBox_HallNo_4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 100, 50, 30));
 
         JCheckBox_HallNo_5.setBackground(new java.awt.Color(0, 0, 0));
         JCheckBox_HallNo_5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JCheckBox_HallNo_5.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_5.setText("5");
-        jPanel1.add(JCheckBox_HallNo_5, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 700, 40, 30));
+        jPanel1.add(JCheckBox_HallNo_5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 100, 40, 30));
 
         JCheckBox_HallNo_6.setBackground(new java.awt.Color(0, 0, 0));
         JCheckBox_HallNo_6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JCheckBox_HallNo_6.setForeground(new java.awt.Color(255, 255, 255));
         JCheckBox_HallNo_6.setText("6");
-        jPanel1.add(JCheckBox_HallNo_6, new org.netbeans.lib.awtextra.AbsoluteConstraints(800, 700, 50, 30));
+        jPanel1.add(JCheckBox_HallNo_6, new org.netbeans.lib.awtextra.AbsoluteConstraints(1280, 100, 50, 30));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
@@ -539,7 +613,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
         lblImagePreview.setForeground(new java.awt.Color(255, 255, 255));
         lblImagePreview.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(153, 153, 153)));
-        jPanel1.add(lblImagePreview, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 140, 180, 270));
+        jPanel1.add(lblImagePreview, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 260, 180, 270));
 
         btnChooseImage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnChooseImage.setText("Browse");
@@ -548,12 +622,12 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 btnChooseImageActionPerformed(evt);
             }
         });
-        jPanel1.add(btnChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 170, 80, 30));
+        jPanel1.add(btnChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 220, 250, 30));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
         jLabel18.setText("Main Image");
-        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 130, -1, 30));
+        jPanel1.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 220, -1, 30));
 
         JBTN_Back.setBackground(new java.awt.Color(0, 0, 0));
         JBTN_Back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
@@ -563,6 +637,21 @@ public class Add_Movie_dash extends javax.swing.JFrame {
             }
         });
         jPanel1.add(JBTN_Back, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
+
+        jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel19.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel19.setText("Active on Maven Cinemas ");
+        jPanel1.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(910, 60, -1, -1));
+
+        JCB_MavenCinema_Yes.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        JCB_MavenCinema_Yes.setForeground(new java.awt.Color(255, 255, 255));
+        JCB_MavenCinema_Yes.setText("YES");
+        jPanel1.add(JCB_MavenCinema_Yes, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 60, 60, -1));
+
+        JCB_MavenCinema_No.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        JCB_MavenCinema_No.setForeground(new java.awt.Color(255, 255, 255));
+        JCB_MavenCinema_No.setText("NO");
+        jPanel1.add(JCB_MavenCinema_No, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 60, 60, -1));
 
         BG.setForeground(new java.awt.Color(255, 255, 255));
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/MovieMavenBG-nologo.jpg"))); // NOI18N
@@ -1579,6 +1668,8 @@ if (imagePath == null || imagePath.isEmpty()) {
     private javax.swing.JButton JBTN_Delete;
     private javax.swing.JButton JBTN_RefreshTable;
     private javax.swing.JButton JBTN_Update;
+    private javax.swing.JCheckBox JCB_MavenCinema_No;
+    private javax.swing.JCheckBox JCB_MavenCinema_Yes;
     private javax.swing.JCheckBox JCheckBox_HallNo_1;
     private javax.swing.JCheckBox JCheckBox_HallNo_2;
     private javax.swing.JCheckBox JCheckBox_HallNo_3;
@@ -1635,6 +1726,7 @@ if (imagePath == null || imagePath.isEmpty()) {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
