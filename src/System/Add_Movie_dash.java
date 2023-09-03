@@ -21,6 +21,13 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
+import javafx.scene.web.WebEngine;
+import javafx.application.Platform;
+import javax.swing.JFrame;
+
 
 
 
@@ -28,6 +35,14 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
     public Add_Movie_dash() {
         initComponents();
+        
+        //Youtube Preview
+        JBTN_Preview_Youtube_Video.addActionListener(new java.awt.event.ActionListener() {
+    public void actionPerformed(java.awt.event.ActionEvent evt) {
+        previewYoutubeVideoActionPerformed(evt);
+    }
+});
+
         
        // if movie is shown in maven cinemas
        JCB_MavenCinema_Yes.addItemListener(new ItemListener() {
@@ -209,7 +224,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_Add_MovieActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 660, 130, 40));
+        jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 520, 130, 40));
         jPanel1.add(JTF_Movie_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 350, 260, 30));
         jPanel1.add(JTF_Year, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 110, 30));
         jPanel1.add(JTF_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 50, 60, 30));
@@ -371,7 +386,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_UpdateActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 660, 130, 40));
+        jPanel1.add(JBTN_Update, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 520, 130, 40));
 
         JBTN_Delete.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         JBTN_Delete.setText("DELETE");
@@ -380,7 +395,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_DeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 660, 130, 40));
+        jPanel1.add(JBTN_Delete, new org.netbeans.lib.awtextra.AbsoluteConstraints(1220, 520, 130, 40));
 
         JComboBox_Content_Rating.setBackground(new java.awt.Color(0, 0, 0));
         JComboBox_Content_Rating.setForeground(new java.awt.Color(255, 255, 255));
@@ -420,7 +435,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 JBTN_CLR_FieldsActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 630, -1, -1));
+        jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 490, -1, -1));
 
         JBTN_RefreshTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JBTN_RefreshTable.setText("REFRESH TABLE");
@@ -593,7 +608,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 btnChooseImageActionPerformed(evt);
             }
         });
-        jPanel1.add(btnChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 670, 250, 30));
+        jPanel1.add(btnChooseImage, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 80, 250, 30));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel18.setForeground(new java.awt.Color(255, 255, 255));
@@ -603,7 +618,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel20.setForeground(new java.awt.Color(255, 255, 255));
         jLabel20.setText("Main Image");
-        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 670, -1, 30));
+        jPanel1.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 40, -1, 30));
 
         JBTN_Back.setBackground(new java.awt.Color(0, 0, 0));
         JBTN_Back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/back.png"))); // NOI18N
@@ -812,6 +827,46 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
     return true;
 } 
+    //VALIDATE YOUTUBE URL
+private void previewYoutubeVideoActionPerformed(java.awt.event.ActionEvent evt) {
+    String youtubeUrl = JTF_Youtube_URL.getText();
+    if (isValidYoutubeUrl(youtubeUrl)) {
+        // Convert standard YouTube URL to embed URL
+        /*
+        Normally, YouTube Url for viewing in a browser look like this: https://www.youtube.com/watch?v=VIDEO_ID. However, for embedding 
+        in an iframe or a WebView, they should follow this format: https://www.youtube.com/embed/VIDEO_ID.
+        
+        Therfore,The URL will be converted from the standard format to the embed format.
+        */
+        String videoId = youtubeUrl.split("v=")[1];
+        String embedUrl = "https://www.youtube.com/embed/" + videoId;
+        
+        // Preview the video using JavaFX WebView
+        JFXPanel jfxPanel = new JFXPanel();
+        Platform.runLater(() -> {
+            WebView webView = new WebView();
+            WebEngine webEngine = webView.getEngine();
+            webEngine.load(embedUrl);
+            jfxPanel.setScene(new Scene(webView));
+        });
+
+        // Create a new JFrame to hold the JFXPanel and show the video
+        JFrame frame = new JFrame("YouTube Video Preview");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.add(jfxPanel);
+        frame.setSize(650, 410);
+        frame.setVisible(true);
+    } else {
+        // Show an error message saying it's not a valid YouTube URL
+        JOptionPane.showMessageDialog(this, "Not a valid YouTube URL.");
+    }
+}
+
+// Validate a YouTube URL
+private boolean isValidYoutubeUrl(String url) {
+    //check the format of the URL
+    return url != null && url.startsWith("https://www.youtube.com/");
+}
 
     //ADD BUTTON FUNCTION
     private void JBTN_Add_MovieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_Add_MovieActionPerformed

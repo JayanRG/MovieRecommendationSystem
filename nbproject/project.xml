@@ -11,6 +11,9 @@
                 <root id="test.src.dir"/>
             </test-roots>
         </data>
+        <libraries xmlns="http://www.netbeans.org/ns/ant-project-libraries/1">
+            <definitions>C:\Users\User\OneDrive\Desktop\Msc Final Project\JAVA FX SDK\javafx-sdk-20.0.2\lib\nblibraries.properties</definitions>
+        </libraries>
         <references xmlns="http://www.netbeans.org/ns/ant-project-references/1">
             <reference>
                 <foreign-project>Stock_Control</foreign-project>
