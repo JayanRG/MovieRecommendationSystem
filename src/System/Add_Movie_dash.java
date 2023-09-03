@@ -207,22 +207,11 @@ public class Add_Movie_dash extends javax.swing.JFrame {
             }
         });
         jPanel1.add(JBTN_Add_Movie, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 580, 130, 40));
-
-        JTF_Movie_Name.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Movie_Name.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_Movie_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 350, 260, 30));
-
-        JTF_Year.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Year.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_Year, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 390, 110, 30));
-
-        JTF_Rating.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Rating.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 230, 60, 30));
 
-        JTextArea_Description.setBackground(new java.awt.Color(0, 0, 0));
         JTextArea_Description.setColumns(20);
-        JTextArea_Description.setForeground(new java.awt.Color(255, 255, 255));
         JTextArea_Description.setRows(5);
         jScrollPane1.setViewportView(JTextArea_Description);
 
@@ -253,9 +242,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel6.setText("Genre");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 50, 30));
 
-        JTable1.setBackground(new java.awt.Color(0, 0, 0));
         JTable1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-        JTable1.setForeground(new java.awt.Color(255, 255, 255));
         JTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null},
@@ -288,9 +275,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, 380, 230));
 
-        JTextArea_Cast.setBackground(new java.awt.Color(0, 0, 0));
         JTextArea_Cast.setColumns(20);
-        JTextArea_Cast.setForeground(new java.awt.Color(255, 255, 255));
         JTextArea_Cast.setRows(5);
         jScrollPane3.setViewportView(JTextArea_Cast);
 
@@ -300,21 +285,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cast");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 290, -1, -1));
-
-        JTF_IMDb_Rating.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_IMDb_Rating.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_IMDb_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 370, 60, 30));
-
-        JTF_Rotten_Tomatoes.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Rotten_Tomatoes.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_Rotten_Tomatoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 420, 70, 30));
-
-        JTF_Director.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Director.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_Director, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 460, 230, 30));
-
-        JTF_Composer.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Composer.setForeground(new java.awt.Color(255, 255, 255));
         jPanel1.add(JTF_Composer, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 500, 230, 30));
 
         JComboBox_Country.setBackground(new java.awt.Color(0, 0, 0));
@@ -330,10 +303,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JComboBox_Quality.setBackground(new java.awt.Color(0, 0, 0));
         JComboBox_Quality.setForeground(new java.awt.Color(255, 255, 255));
         JComboBox_Quality.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "Digital 2D", "Digital 3D", "DOLBY ATMOS" }));
-        jPanel1.add(JComboBox_Quality, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 620, 220, 30));
-
-        JTF_Duration.setBackground(new java.awt.Color(0, 0, 0));
-        JTF_Duration.setForeground(new java.awt.Color(255, 255, 255));
+        jPanel1.add(JComboBox_Quality, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 620, 230, 30));
         jPanel1.add(JTF_Duration, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 660, 100, 30));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
@@ -449,9 +419,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         });
         jPanel1.add(JBTN_CLR_Fields, new org.netbeans.lib.awtextra.AbsoluteConstraints(1200, 550, -1, -1));
 
-        JBTN_RefreshTable.setBackground(new java.awt.Color(0, 0, 0));
         JBTN_RefreshTable.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        JBTN_RefreshTable.setForeground(new java.awt.Color(255, 255, 255));
         JBTN_RefreshTable.setText("REFRESH TABLE");
         JBTN_RefreshTable.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -654,7 +622,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jPanel1.add(JCB_MavenCinema_No, new org.netbeans.lib.awtextra.AbsoluteConstraints(1190, 60, 60, -1));
 
         BG.setForeground(new java.awt.Color(255, 255, 255));
-        BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/MovieMavenBG-nologo.jpg"))); // NOI18N
+        BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/blur.jpg"))); // NOI18N
         jPanel1.add(BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -848,17 +816,16 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         pst.setString(1, JTF_Movie_Name.getText());
         rs = pst.executeQuery();
         
-        String sql = "INSERT INTO `all_movies_db` (`movie_name_db`, `mov_year_db`, `mov_genre_db`, `mov_descrip_db`, `mov_rating_db`, `Cast_db`, `IMDb_Rating_db`, `Rotten_Tomatos_db`, `Director_db`, `Music_composed_by_db`, `Content_Rating_db`, `Country_db`, `Quality_db`, `Duration_db`, `Hall_No_db`, `Showing_Times_db`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `all_movies_db` (`movie_name_db`, `mov_year_db`, `mov_genre_db`, `mov_descrip_db`, `mov_rating_db`, `Cast_db`, `IMDb_Rating_db`, `Rotten_Tomatos_db`, `Director_db`, `Music_composed_by_db`, `Content_Rating_db`, `Country_db`, `Quality_db`, `Duration_db`, `Hall_No_db`, `Showing_Times_db`, `Maven_Cinema_Activity`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        
+        // Validation for Movie Name (Should be unique)
         if(rs.next()) {
             JOptionPane.showMessageDialog(null, "Movie Name already Exists");
             return;
         }
 
-        // Validation for Movie Name (Should be unique - we have already checked this above)
         if (JTF_Movie_Name.getText().trim().isEmpty()) {
-    JOptionPane.showMessageDialog(null, "Movie name cannot be empty.");
+        JOptionPane.showMessageDialog(null, "Movie name cannot be empty.");
         return;
 }
 
@@ -939,11 +906,11 @@ try {
     return;
 }
 
-// Validation for Rotten Tomatoes Rating (Should be between 0% and 100%)
+// Validation for Rotten Tomatoes Rating (Should be between 0 and 100)
 try {
     int rottenRating = Integer.parseInt(JTF_Rotten_Tomatoes.getText().replace("%", ""));
     if (rottenRating < 0 || rottenRating > 100) {
-        JOptionPane.showMessageDialog(null, "Rotten Tomatoes rating should be between 0% and 100%.");
+        JOptionPane.showMessageDialog(null, "Rotten Tomatoes rating should be between 0 and 100");
         return;
     }
 } catch (NumberFormatException e) {
@@ -992,32 +959,32 @@ if (!matcher.matches()) {
     return;
 }
 
-// Validation for Hall No (At least one should be selected)
-boolean isHallSelected = JCheckBox_HallNo_1.isSelected() || JCheckBox_HallNo_2.isSelected() || JCheckBox_HallNo_3.isSelected() || 
-                         JCheckBox_HallNo_4.isSelected() || JCheckBox_HallNo_5.isSelected() || JCheckBox_HallNo_6.isSelected();
-if (!isHallSelected) {
-    JOptionPane.showMessageDialog(null, "Select at least one Hall.");
-    return;
-}
+boolean isMavenCinemaNo = JCB_MavenCinema_No.isSelected();
 
-// Validation for Showing Times (At least one should be selected)
-boolean isTimeSelected = JCheckBox_ShowingTimes_1030AM.isSelected() || JCheckBox_ShowingTimes_0130PM.isSelected() || 
-                         JCheckBox_ShowingTimes_0430PM.isSelected() || JCheckBox_ShowingTimes_0730PM.isSelected() || 
-                         JCheckBox_ShowingTimes_1030PM.isSelected();
-if (!isTimeSelected) {
-    JOptionPane.showMessageDialog(null, "Select at least one Showing Time.");
-    return;
-}
-//Valdidating if the image is available.
-if (imagePath == null || imagePath.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Please select an image for the movie.");
-    return;
+// If Maven Cinema is not set to "NO", then go with the regular validation
+if (!isMavenCinemaNo) {
+    // Validation for Hall No (At least one should be selected)
+    boolean isHallSelected = JCheckBox_HallNo_1.isSelected() || JCheckBox_HallNo_2.isSelected() || JCheckBox_HallNo_3.isSelected() || 
+                             JCheckBox_HallNo_4.isSelected() || JCheckBox_HallNo_5.isSelected() || JCheckBox_HallNo_6.isSelected();
+    if (!isHallSelected) {
+        JOptionPane.showMessageDialog(null, "Select at least one Hall.");
+        return;
+    }
+
+    // Validation for Showing Times (At least one should be selected)
+    boolean isTimeSelected = JCheckBox_ShowingTimes_1030AM.isSelected() || JCheckBox_ShowingTimes_0130PM.isSelected() || 
+                             JCheckBox_ShowingTimes_0430PM.isSelected() || JCheckBox_ShowingTimes_0730PM.isSelected() || 
+                             JCheckBox_ShowingTimes_1030PM.isSelected();
+    if (!isTimeSelected) {
+        JOptionPane.showMessageDialog(null, "Select at least one Showing Time.");
+        return;
+    }
 }
 
 
 
         // Insert data if validation passes
-        query = "INSERT INTO all_movies_db (movie_name_db, mov_year_db, mov_genre_db, mov_descrip_db, mov_rating_db, Cast_db, IMDb_Rating_db, Rotten_Tomatos_db, Director_db, Music_composed_by_db, Content_Rating_db, Country_db, Quality_db, Duration_db, Hall_No_db, Showing_Times_db, image_path) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        query = "INSERT INTO all_movies_db (movie_name_db, mov_year_db, mov_genre_db, mov_descrip_db, mov_rating_db, Cast_db, IMDb_Rating_db, Rotten_Tomatos_db, Director_db, Music_composed_by_db, Content_Rating_db, Country_db, Quality_db, Duration_db, Hall_No_db, Showing_Times_db, image_path, Maven_Cinema_Activity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         pst = conn.prepareStatement(query);
         pst.setString(1, JTF_Movie_Name.getText());
         pst.setInt(2, Integer.parseInt(JTF_Year.getText()));
@@ -1051,10 +1018,12 @@ if (imagePath == null || imagePath.isEmpty()) {
         if (JCheckBox_ShowingTimes_1030PM.isSelected()) showingTimes.append("10:30 PM,");
         if (showingTimes.length() > 0) showingTimes.setLength(showingTimes.length() - 1); // Remove last comma
 
+        String mavenCinemaActivity = JCB_MavenCinema_Yes.isSelected() ? "YES" : "NO";
+     
         pst.setString(16, showingTimes.toString());
         pst.setString(15, hallNumbers.toString());
         pst.setString(17, imagePath);
-        
+        pst.setString(18, JCB_MavenCinema_No.isSelected() ? "NO" : "YES");
         
         StringBuilder genres = new StringBuilder();
         if (jCheckBox_GENRE_Action.isSelected()) genres.append("Action,");
