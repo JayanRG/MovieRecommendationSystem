@@ -27,6 +27,12 @@ import javafx.scene.web.WebView;
 import javafx.scene.web.WebEngine;
 import javafx.application.Platform;
 import javax.swing.JFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.Desktop;
+import java.net.URI;
+
+
 
 
 
@@ -828,44 +834,28 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     return true;
 } 
     //VALIDATE YOUTUBE URL
-private void previewYoutubeVideoActionPerformed(java.awt.event.ActionEvent evt) {
-    String youtubeUrl = JTF_Youtube_URL.getText();
-    if (isValidYoutubeUrl(youtubeUrl)) {
-        // Convert standard YouTube URL to embed URL
-        /*
-        Normally, YouTube Url for viewing in a browser look like this: https://www.youtube.com/watch?v=VIDEO_ID. However, for embedding 
-        in an iframe or a WebView, they should follow this format: https://www.youtube.com/embed/VIDEO_ID.
-        
-        Therfore,The URL will be converted from the standard format to the embed format.
-        */
-        String videoId = youtubeUrl.split("v=")[1];
-        String embedUrl = "https://www.youtube.com/embed/" + videoId;
-        
-        // Preview the video using JavaFX WebView
-        JFXPanel jfxPanel = new JFXPanel();
-        Platform.runLater(() -> {
-            WebView webView = new WebView();
-            WebEngine webEngine = webView.getEngine();
-            webEngine.load(embedUrl);
-            jfxPanel.setScene(new Scene(webView));
-        });
-
-        // Create a new JFrame to hold the JFXPanel and show the video
-        JFrame frame = new JFrame("YouTube Video Preview");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.add(jfxPanel);
-        frame.setSize(650, 410);
-        frame.setVisible(true);
+private void previewYoutubeVideoActionPerformed(java.awt.event.ActionEvent evt) {  //This method is invoked when the "Preview" button is clicked
+    String youtubeUrl = JTF_Youtube_URL.getText(); //fetches the YouTube URL entered
+    if (isValidYoutubeUrl(youtubeUrl)) {  //checks if the entered URL is a valid YouTube URL with the helper method 'isValidYoutubeUrl'.
+        try {
+            if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+                Desktop.getDesktop().browse(new URI(youtubeUrl));
+//above checks if the Desktop class is supported in the current environment and if the BROWSE action is supported. If so, open the URL in the default web browser.
+            }
+        } catch (Exception e) {  //exceptions are caught and printed to the console,
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Failed to open the URL.");
+        }
     } else {
-        // Show an error message saying it's not a valid YouTube URL
+        //dialog inform the user that it's not a valid YouTube URL
         JOptionPane.showMessageDialog(this, "Not a valid YouTube URL.");
     }
 }
 
 // Validate a YouTube URL
-private boolean isValidYoutubeUrl(String url) {
+private boolean isValidYoutubeUrl(String url) {  //This is a helper method that checks if a given URL is a valid YouTube URL
     //check the format of the URL
-    return url != null && url.startsWith("https://www.youtube.com/");
+    return url != null && url.startsWith("https://www.youtube.com/"); // line checks if the URL is not null and if it starts with the string "https://www.youtube.com/"
 }
 
     //ADD BUTTON FUNCTION
@@ -884,7 +874,8 @@ private boolean isValidYoutubeUrl(String url) {
         pst.setString(1, JTF_Movie_Name.getText());
         rs = pst.executeQuery();
         
-        String sql = "INSERT INTO `all_movies_db` (`movie_name_db`, `mov_year_db`, `mov_genre_db`, `mov_descrip_db`, `mov_rating_db`, `Cast_db`, `IMDb_Rating_db`, `Rotten_Tomatos_db`, `Director_db`, `Music_composed_by_db`, `Content_Rating_db`, `Country_db`, `Quality_db`, `Duration_db`, `Hall_No_db`, `Showing_Times_db`, `Maven_Cinema_Activity`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // SQL query
+        String sql = "INSERT INTO `all_movies_db` (`movie_name_db`, `mov_year_db`, `mov_genre_db`, `mov_descrip_db`, `mov_rating_db`, `Cast_db`, `IMDb_Rating_db`, `Rotten_Tomatos_db`, `Director_db`, `Music_composed_by_db`, `Content_Rating_db`, `Country_db`, `Quality_db`, `Duration_db`, `Hall_No_db`, `Showing_Times_db`, `Maven_Cinema_Activity`,  `Youtube_URL`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         // Validation for Movie Name (Should be unique)
         if(rs.next()) {
@@ -1052,7 +1043,7 @@ if (!isMavenCinemaNo) {
 
 
         // Insert data if validation passes
-        query = "INSERT INTO all_movies_db (movie_name_db, mov_year_db, mov_genre_db, mov_descrip_db, mov_rating_db, Cast_db, IMDb_Rating_db, Rotten_Tomatos_db, Director_db, Music_composed_by_db, Content_Rating_db, Country_db, Quality_db, Duration_db, Hall_No_db, Showing_Times_db, image_path, Maven_Cinema_Activity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        query = "INSERT INTO all_movies_db (movie_name_db, mov_year_db, mov_genre_db, mov_descrip_db, mov_rating_db, Cast_db, IMDb_Rating_db, Rotten_Tomatos_db, Director_db, Music_composed_by_db, Content_Rating_db, Country_db, Quality_db, Duration_db, Hall_No_db, Showing_Times_db, image_path, Maven_Cinema_Activity, Youtube_URL) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         pst = conn.prepareStatement(query);
         pst.setString(1, JTF_Movie_Name.getText());
         pst.setInt(2, Integer.parseInt(JTF_Year.getText()));
@@ -1092,6 +1083,8 @@ if (!isMavenCinemaNo) {
         pst.setString(15, hallNumbers.toString());
         pst.setString(17, imagePath);
         pst.setString(18, JCB_MavenCinema_No.isSelected() ? "NO" : "YES");
+        String youtubeUrl = JTF_Youtube_URL.getText();
+        pst.setString(19, youtubeUrl);
         
         StringBuilder genres = new StringBuilder();
         if (jCheckBox_GENRE_Action.isSelected()) genres.append("Action,");
@@ -1783,4 +1776,10 @@ if (!isMavenCinemaNo) {
     // End of variables declaration//GEN-END:variables
     // User-defined variables
     private String imagePath;
+    private JFrame youtubePreviewFrame;
+    private WebEngine webEngine;
+    private JFXPanel jfxPanel;
+
+
+
 }
