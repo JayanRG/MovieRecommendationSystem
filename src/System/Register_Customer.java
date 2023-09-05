@@ -7,6 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 
 
 public class Register_Customer extends javax.swing.JFrame {
@@ -31,6 +34,22 @@ public class Register_Customer extends javax.swing.JFrame {
 *  */
 
         initComponents();
+        //PASSWORD VISIBILITY
+        JCheckBox_ViewPassword.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Check if the checkbox is selected
+        if (JCheckBox_ViewPassword.isSelected()) {
+            // If selected, set the echo character to '\0' (NULL) to display the password
+            JTF_Password.setEchoChar((char) 0);
+        } else {
+            // If not selected, set the echo character to '*' to hide the password
+            JTF_Password.setEchoChar('*');
+        }
+    }
+});
+        
+        
     }
 
 
@@ -50,9 +69,48 @@ public class Register_Customer extends javax.swing.JFrame {
         JTF_Last_Name = new javax.swing.JTextField();
         JTF_Email = new javax.swing.JTextField();
         JTF_Username = new javax.swing.JTextField();
-        JTF_Password = new javax.swing.JTextField();
         JBTN_Register = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        JCheckBox_ViewPassword = new javax.swing.JCheckBox();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jCheckBox_GENRE_Action = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Drama = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Mystery = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Adventure = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_ScienceFiction = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Romance = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Family = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Animation = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Fantasy = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Biography = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_FilmNoir = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Thriller = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Documentary = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Historical = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_War = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Comedy = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Crime = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Horror = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Musical = new javax.swing.JCheckBox();
+        jCheckBox_GENRE_Western = new javax.swing.JCheckBox();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<>();
+        JTF_Password = new javax.swing.JPasswordField();
         BG = new javax.swing.JLabel();
+        jPasswordField2 = new javax.swing.JPasswordField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1366, 768));
@@ -117,23 +175,12 @@ public class Register_Customer extends javax.swing.JFrame {
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 720, 40, 40));
 
         jLabel2.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
-        jLabel2.setText("PERSONAL INFORMATION");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 120, -1, -1));
-
-        JTF_First_Name.setText("FIRST NAME");
-        jPanel1.add(JTF_First_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 220, 330, 40));
-
-        JTF_Last_Name.setText("LAST NAME");
-        jPanel1.add(JTF_Last_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 290, 330, 40));
-
-        JTF_Email.setText("EMAIL");
-        jPanel1.add(JTF_Email, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 420, 330, 40));
-
-        JTF_Username.setText("USERNAME");
-        jPanel1.add(JTF_Username, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 360, 330, 40));
-
-        JTF_Password.setText("PASSWORD");
-        jPanel1.add(JTF_Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 480, 330, 40));
+        jLabel2.setText("MOVIE PREFERENCE");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 130, -1, -1));
+        jPanel1.add(JTF_First_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 190, 330, 40));
+        jPanel1.add(JTF_Last_Name, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 330, 40));
+        jPanel1.add(JTF_Email, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 400, 330, 40));
+        jPanel1.add(JTF_Username, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 330, 330, 40));
 
         JBTN_Register.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         JBTN_Register.setText("REGISTER");
@@ -142,10 +189,143 @@ public class Register_Customer extends javax.swing.JFrame {
                 JBTN_RegisterActionPerformed(evt);
             }
         });
-        jPanel1.add(JBTN_Register, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 550, 330, 100));
+        jPanel1.add(JBTN_Register, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 560, 330, 100));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setText("RATINGS");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 410, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setText("LAST NAME");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 240, -1, -1));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel5.setText("USERNAME");
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 310, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel6.setText("EMAIL");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 380, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel7.setText("PASSWORD");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 450, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jLabel8.setText("HINT");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 630, 400, -1));
+
+        jLabel9.setText("Password should be more than 6 characters and less than 18 characters.");
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 690, 400, -1));
+
+        jLabel10.setText("Username and Email Should be Unique");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 670, 400, -1));
+
+        jLabel11.setText("FOR THE BEST EXPERIENCE PICK ONE");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(1010, 490, 230, -1));
+
+        JCheckBox_ViewPassword.setText("Show Password");
+        jPanel1.add(JCheckBox_ViewPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 470, 120, 40));
+
+        jLabel12.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
+        jLabel12.setText("PERSONAL INFORMATION");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 130, -1, -1));
+
+        jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel13.setText("FIRST NAME");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 170, -1, -1));
+
+        jLabel14.setText("All Personal Feilds are Mandatory ");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 650, 400, -1));
+
+        jCheckBox_GENRE_Action.setText("Action");
+        jPanel1.add(jCheckBox_GENRE_Action, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 200, -1, -1));
+
+        jCheckBox_GENRE_Drama.setText("Drama");
+        jPanel1.add(jCheckBox_GENRE_Drama, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 200, -1, -1));
+
+        jCheckBox_GENRE_Mystery.setText("Mystery");
+        jPanel1.add(jCheckBox_GENRE_Mystery, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 200, -1, -1));
+
+        jCheckBox_GENRE_Adventure.setText("Adventure");
+        jPanel1.add(jCheckBox_GENRE_Adventure, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 200, -1, -1));
+
+        jCheckBox_GENRE_ScienceFiction.setText("Science Fiction");
+        jPanel1.add(jCheckBox_GENRE_ScienceFiction, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 220, -1, -1));
+
+        jCheckBox_GENRE_Romance.setText("Romance");
+        jPanel1.add(jCheckBox_GENRE_Romance, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 220, -1, -1));
+
+        jCheckBox_GENRE_Family.setText("Family");
+        jPanel1.add(jCheckBox_GENRE_Family, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 220, -1, -1));
+
+        jCheckBox_GENRE_Animation.setText("Animation");
+        jCheckBox_GENRE_Animation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCheckBox_GENRE_AnimationActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jCheckBox_GENRE_Animation, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 220, -1, -1));
+
+        jCheckBox_GENRE_Fantasy.setText("Fantasy");
+        jPanel1.add(jCheckBox_GENRE_Fantasy, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 240, -1, -1));
+
+        jCheckBox_GENRE_Biography.setText("Biography");
+        jPanel1.add(jCheckBox_GENRE_Biography, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 240, -1, -1));
+
+        jCheckBox_GENRE_FilmNoir.setText("Film Noir");
+        jPanel1.add(jCheckBox_GENRE_FilmNoir, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 240, -1, -1));
+
+        jCheckBox_GENRE_Thriller.setText("Thriller");
+        jPanel1.add(jCheckBox_GENRE_Thriller, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 240, -1, -1));
+
+        jCheckBox_GENRE_Documentary.setText("Documentary");
+        jPanel1.add(jCheckBox_GENRE_Documentary, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 260, -1, -1));
+
+        jCheckBox_GENRE_Historical.setText("Historical");
+        jPanel1.add(jCheckBox_GENRE_Historical, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 260, -1, -1));
+
+        jCheckBox_GENRE_War.setText("War");
+        jPanel1.add(jCheckBox_GENRE_War, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 260, -1, -1));
+
+        jCheckBox_GENRE_Comedy.setText("Comedy");
+        jPanel1.add(jCheckBox_GENRE_Comedy, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 260, -1, -1));
+
+        jCheckBox_GENRE_Crime.setText("Crime");
+        jPanel1.add(jCheckBox_GENRE_Crime, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 280, -1, -1));
+
+        jCheckBox_GENRE_Horror.setText("Horror");
+        jPanel1.add(jCheckBox_GENRE_Horror, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 280, -1, -1));
+
+        jCheckBox_GENRE_Musical.setText("Musical");
+        jPanel1.add(jCheckBox_GENRE_Musical, new org.netbeans.lib.awtextra.AbsoluteConstraints(1100, 280, -1, -1));
+
+        jCheckBox_GENRE_Western.setText("Western");
+        jPanel1.add(jCheckBox_GENRE_Western, new org.netbeans.lib.awtextra.AbsoluteConstraints(1180, 280, -1, -1));
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel15.setText("GENRE PREFERENCE");
+        jPanel1.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 170, -1, -1));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel16.setText("TIME PREFERENCE");
+        jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 340, -1, -1));
+
+        jLabel17.setText("FOR THE BEST EXPERIENCE PICK THREE TO FIVE GENRE'S");
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 310, 320, -1));
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "OLDER", "RECENT", "NO PREFERENCE" }));
+        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 370, 320, 30));
+
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "7 & ABOVE", "5 & ABOVE", "NO PREFERENCE" }));
+        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 440, 320, 30));
+        jPanel1.add(JTF_Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 330, 40));
 
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/RegisterBG.jpg"))); // NOI18N
         jPanel1.add(BG, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+
+        jPasswordField2.setText("jPasswordField2");
+        jPanel1.add(jPasswordField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 520, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -264,9 +444,10 @@ public class Register_Customer extends javax.swing.JFrame {
     }
     }//GEN-LAST:event_JBTN_RegisterActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
+    private void jCheckBox_GENRE_AnimationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_GENRE_AnimationActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCheckBox_GENRE_AnimationActionPerformed
+
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -302,18 +483,57 @@ public class Register_Customer extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel BG;
     private javax.swing.JButton JBTN_Register;
+    private javax.swing.JCheckBox JCheckBox_ViewPassword;
     private javax.swing.JTextField JTF_Email;
     private javax.swing.JTextField JTF_First_Name;
     private javax.swing.JTextField JTF_Last_Name;
-    private javax.swing.JTextField JTF_Password;
+    private javax.swing.JPasswordField JTF_Password;
     private javax.swing.JTextField JTF_Username;
     private javax.swing.JLabel SystemStatus;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Action;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Adventure;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Animation;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Biography;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Comedy;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Crime;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Documentary;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Drama;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Family;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Fantasy;
+    private javax.swing.JCheckBox jCheckBox_GENRE_FilmNoir;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Historical;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Horror;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Musical;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Mystery;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Romance;
+    private javax.swing.JCheckBox jCheckBox_GENRE_ScienceFiction;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Thriller;
+    private javax.swing.JCheckBox jCheckBox_GENRE_War;
+    private javax.swing.JCheckBox jCheckBox_GENRE_Western;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPasswordField jPasswordField2;
     // End of variables declaration//GEN-END:variables
 }

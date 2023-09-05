@@ -21,14 +21,6 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebView;
-import javafx.scene.web.WebEngine;
-import javafx.application.Platform;
-import javax.swing.JFrame;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.Desktop;
 import java.net.URI; //Fetching External Ratings
 import java.net.HttpURLConnection;
@@ -38,6 +30,18 @@ import java.io.InputStreamReader;
 import org.json.JSONObject;
 import java.awt.event.ActionEvent;//required classes for fetch rating action listener 
 import java.awt.event.ActionListener;
+import java.awt.Image;//classes required for cropping the main image
+import java.awt.image.BufferedImage;
+import java.awt.image.CropImageFilter;
+import java.awt.image.FilteredImageSource;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Graphics2D;
+import java.awt.Toolkit;
 
 
 public class Add_Movie_dash extends javax.swing.JFrame {
@@ -303,6 +307,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         lblLoadingIndicator = new javax.swing.JLabel();
         btnFetchRatings = new javax.swing.JButton();
         jLabel21 = new javax.swing.JLabel();
+        JTF_MainImage_URL = new javax.swing.JTextField();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -753,8 +758,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jPanel1.add(btnFetchRatings, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 190, 170, 50));
 
         jLabel21.setForeground(new java.awt.Color(204, 0, 0));
-        jLabel21.setText("Always Fetch Rating Accurate Results*");
+        jLabel21.setText("Always Fetch Rating for Accurate Results*");
         jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 246, 240, 20));
+        jPanel1.add(JTF_MainImage_URL, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 120, 250, 30));
 
         BG.setForeground(new java.awt.Color(255, 255, 255));
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/blur.jpg"))); // NOI18N
@@ -1457,19 +1463,67 @@ if (!isMavenCinemaNo) {
         }
     }
 }
-
+    //Resize the Main image according to the label
     private void displayImage(File file) {
     try {
-        BufferedImage img = ImageIO.read(file);
-        ImageIcon icon = new ImageIcon(img);
-        lblImagePreview.setIcon(icon);
+        BufferedImage originalImage = ImageIO.read(file);
+
+        // JLabel dimensions
+        int labelWidth = lblImagePreview.getWidth();
+        int labelHeight = lblImagePreview.getHeight();
+
+        // Original image dimensions
+        int originalWidth = originalImage.getWidth();
+        int originalHeight = originalImage.getHeight();
+
+        // Calculate aspect ratios
+        double originalAspect = (double) originalWidth / originalHeight;
+        double labelAspect = (double) labelWidth / labelHeight;
+
+        // Initialize dimensions for scaling
+        int newWidth, newHeight;
+
+        // Compare aspect ratios to determine how to fit the JLabel
+        if (originalAspect >= labelAspect) {
+            // If the original aspect ratio is greater or equal, scale height to fit and crop width
+            newHeight = labelHeight;
+            newWidth = (int) (labelHeight * originalAspect);
+        } else {
+            // If the original aspect ratio is smaller, scale width to fit and crop height
+            newWidth = labelWidth;
+            newHeight = (int) (labelWidth / originalAspect);
+        }
+
+        // Create a new scaled image
+        Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+        BufferedImage bufferedScaled = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = bufferedScaled.createGraphics();
+        g2d.drawImage(scaledImage, 0, 0, null);
+        g2d.dispose();
+
+        // Calculate cropping dimensions
+        int cropX = (newWidth - labelWidth) / 2;
+        int cropY = (newHeight - labelHeight) / 2;
+
+        // Perform crop operation
+        BufferedImage croppedImage = bufferedScaled.getSubimage(cropX, cropY, labelWidth, labelHeight);
+
+        // Display the final cropped image in the JLabel
+        lblImagePreview.setIcon(new ImageIcon(croppedImage));
+
         // Store the path for database insertion
         imagePath = file.getAbsolutePath();
+        
+        // Display the URL in the text field
+        JTF_MainImage_URL.setText(imagePath);
+
+        // Disable the text field
+        JTF_MainImage_URL.setEnabled(false);
+        
     } catch (IOException ex) {
         JOptionPane.showMessageDialog(this, "Error loading image.");
     }
-}
-
+}    
     
     private void JComboBox_CountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JComboBox_CountryActionPerformed
         // TODO add your handling code here:
@@ -1811,6 +1865,7 @@ if (!isMavenCinemaNo) {
     private javax.swing.JTextField JTF_Director;
     private javax.swing.JTextField JTF_Duration;
     private javax.swing.JTextField JTF_IMDb_Rating;
+    private javax.swing.JTextField JTF_MainImage_URL;
     private javax.swing.JTextField JTF_Movie_Name;
     private javax.swing.JTextField JTF_Rating;
     private javax.swing.JTextField JTF_Rotten_Tomatoes;
