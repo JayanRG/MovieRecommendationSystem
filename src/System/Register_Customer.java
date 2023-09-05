@@ -9,30 +9,15 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-
-
+import java.awt.Dimension;
+import java.util.ArrayList;
 
 public class Register_Customer extends javax.swing.JFrame {
 
 //Creates new form Register_Customer
 
     public Register_Customer() {
-      /**  
-//Full Screen window
-        setUndecorated(true);
-        
-        setAlwaysOnTop(true);
-        setResizable(false);
-        setVisible(true);
-        Toolkit tk= Toolkit.getDefaultToolkit();
-        
-        int x=(int) tk.getScreenSize().getWidth();
-        int y=(int) tk.getScreenSize().getHeight();
-        
-        setSize(x,y);
-//End of Full Screen window
-*  */
-
+     
         initComponents();
         //PASSWORD VISIBILITY
         JCheckBox_ViewPassword.addActionListener(new ActionListener() {
@@ -48,6 +33,18 @@ public class Register_Customer extends javax.swing.JFrame {
         }
     }
 });
+        
+        
+        // Get the size of the screen
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension screenSize = tk.getScreenSize();
+
+        // Set the JFrame to full screen
+        this.setSize(screenSize.width, screenSize.height);
+
+        // Make the JFrame non-resizable
+        this.setResizable(false);
+
         
         
     }
@@ -106,8 +103,8 @@ public class Register_Customer extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox_TimePref = new javax.swing.JComboBox<>();
+        jComboBox_RatingPref = new javax.swing.JComboBox<>();
         JTF_Password = new javax.swing.JPasswordField();
         BG = new javax.swing.JLabel();
         jPasswordField2 = new javax.swing.JPasswordField();
@@ -163,16 +160,17 @@ public class Register_Customer extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 680, 220, 30));
+        jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 640, 220, 30));
 
         SystemStatus.setFont(new java.awt.Font("Calibri", 1, 12)); // NOI18N
+        SystemStatus.setForeground(new java.awt.Color(255, 255, 255));
         SystemStatus.setText("SYSTEM STATUS");
-        jPanel1.add(SystemStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 740, -1, -1));
+        jPanel1.add(SystemStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 700, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Calibri", 1, 48)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 255, 0));
         jLabel1.setText(".");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 720, 40, 40));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 680, 40, 40));
 
         jLabel2.setFont(new java.awt.Font("Calibri Light", 1, 18)); // NOI18N
         jLabel2.setText("MOVIE PREFERENCE");
@@ -216,7 +214,7 @@ public class Register_Customer extends javax.swing.JFrame {
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 630, 400, -1));
 
         jLabel9.setText("Password should be more than 6 characters and less than 18 characters.");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 690, 400, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 690, 510, -1));
 
         jLabel10.setText("Username and Email Should be Unique");
         jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 670, 400, -1));
@@ -312,13 +310,13 @@ public class Register_Customer extends javax.swing.JFrame {
         jPanel1.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 340, -1, -1));
 
         jLabel17.setText("FOR THE BEST EXPERIENCE PICK THREE TO FIVE GENRE'S");
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 310, 320, -1));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 310, 390, -1));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "OLDER", "RECENT", "NO PREFERENCE" }));
-        jPanel1.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 370, 320, 30));
+        jComboBox_TimePref.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "OLDER", "RECENT", "NO PREFERENCE" }));
+        jPanel1.add(jComboBox_TimePref, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 370, 320, 30));
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "7 & ABOVE", "5 & ABOVE", "NO PREFERENCE" }));
-        jPanel1.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 440, 320, 30));
+        jComboBox_RatingPref.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NOT SELECTED", "7 & ABOVE", "5 & ABOVE", "NO PREFERENCE" }));
+        jPanel1.add(jComboBox_RatingPref, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 440, 320, 30));
         jPanel1.add(JTF_Password, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 470, 330, 40));
 
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/RegisterBG.jpg"))); // NOI18N
@@ -378,13 +376,95 @@ public class Register_Customer extends javax.swing.JFrame {
         //Hide the Current Page
         this.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    //REGISTER BUTTON
     private void JBTN_RegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_RegisterActionPerformed
     String firstName = JTF_First_Name.getText();
     String lastName = JTF_Last_Name.getText();
     String username = JTF_Username.getText();
     String email = JTF_Email.getText();
     String password = JTF_Password.getText();
+
+    ArrayList<String> selectedGenres = new ArrayList<>();
+    if (jCheckBox_GENRE_Action.isSelected()) {
+    selectedGenres.add("Action");
+}
+    if (jCheckBox_GENRE_Drama.isSelected()) {
+    selectedGenres.add("Drama");
+}
+    if (jCheckBox_GENRE_Mystery.isSelected()) {
+    selectedGenres.add("Mystery");
+}
+    if (jCheckBox_GENRE_Adventure.isSelected()) {
+    selectedGenres.add("Adventure");
+}
+    if (jCheckBox_GENRE_Animation.isSelected()) {
+    selectedGenres.add("Animation");
+}
+    if (jCheckBox_GENRE_Family.isSelected()) {
+    selectedGenres.add("Family");
+}
+    if (jCheckBox_GENRE_Romance.isSelected()) {
+    selectedGenres.add("Romance");
+}
+    if (jCheckBox_GENRE_ScienceFiction.isSelected()) {
+    selectedGenres.add("Science Fiction");
+}
+    if (jCheckBox_GENRE_Fantasy.isSelected()) {
+    selectedGenres.add("Fantasy");
+}
+    if (jCheckBox_GENRE_Biography.isSelected()) {
+    selectedGenres.add("Biography");
+}
+    if (jCheckBox_GENRE_FilmNoir.isSelected()) {
+    selectedGenres.add("Film Noir");
+}
+    if (jCheckBox_GENRE_Thriller.isSelected()) {
+    selectedGenres.add("Thriller");
+}
+    if (jCheckBox_GENRE_Comedy.isSelected()) {
+    selectedGenres.add("Comedy");
+}
+    if (jCheckBox_GENRE_Historical.isSelected()) {
+    selectedGenres.add("Historical");
+}
+    if (jCheckBox_GENRE_War.isSelected()) {
+    selectedGenres.add("War");
+}
+    if (jCheckBox_GENRE_Documentary.isSelected()) {
+    selectedGenres.add("Documentary");
+}
+    if (jCheckBox_GENRE_Crime.isSelected()) {
+    selectedGenres.add("Crime");
+}
+    if (jCheckBox_GENRE_Horror.isSelected()) {
+    selectedGenres.add("Horror");
+}
+    if (jCheckBox_GENRE_Musical.isSelected()) {
+    selectedGenres.add("Musical");
+}
+    if (jCheckBox_GENRE_Western.isSelected()) {
+    selectedGenres.add("Western");
+}
+    if (selectedGenres.size() < 3 || selectedGenres.size() > 5) {
+    JOptionPane.showMessageDialog(null, "Please select between 3 to 5 genres.");
+    return;
+}
+    String joinedGenres = String.join(",", selectedGenres);
+    String timePreference = (String) jComboBox_TimePref.getSelectedItem();
+    String ratingPreference = (String) jComboBox_RatingPref.getSelectedItem();
+
+    //VALIDATION FOR TIME PREFERENCE
+    if ("NOT SELECTED".equals(timePreference)) {
+    JOptionPane.showMessageDialog(null, "Please select a valid time preference.");
+    return;
+}
+
+    //VALIDATE RATING
+    if ("NOT SELECTED".equals(ratingPreference)) {
+    JOptionPane.showMessageDialog(null, "Please select a valid rating preference.");
+    return;
+}
+
     
     if (password.length() < 6 || password.length() > 18) {
         JOptionPane.showMessageDialog(null, "Password should be more than 6 characters and less than 18 characters.");
@@ -410,17 +490,22 @@ public class Register_Customer extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Email already exists.");
             } 
         } else {
-            pstmt = conn.prepareStatement("INSERT INTO users(firstname, lastname, username, email, password) VALUES (?, ?, ?, ?, ?)");
+            pstmt = conn.prepareStatement("INSERT INTO users(firstname, lastname, username, email, password, DB_IntiPref_Genre, DB_IntiPref_Time, DB_IntiPref_Rating) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
             pstmt.setString(1, firstName);
             pstmt.setString(2, lastName);
             pstmt.setString(3, username);
             pstmt.setString(4, email);
             pstmt.setString(5, password);
+            pstmt.setString(6, joinedGenres);
+            pstmt.setString(7, timePreference);
+            pstmt.setString(8, ratingPreference);
             
             int i = pstmt.executeUpdate();
             
             if (i > 0) {
                 JOptionPane.showMessageDialog(null, "User registration successful.");
+                new Login().setVisible(true); // Open the Login window
+                this.dispose(); // Close the current Register_Customer window
             } else {
                 JOptionPane.showMessageDialog(null, "User registration failed.");
             }
@@ -514,8 +599,8 @@ public class Register_Customer extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_GENRE_Thriller;
     private javax.swing.JCheckBox jCheckBox_GENRE_War;
     private javax.swing.JCheckBox jCheckBox_GENRE_Western;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox_RatingPref;
+    private javax.swing.JComboBox<String> jComboBox_TimePref;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
