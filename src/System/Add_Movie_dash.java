@@ -45,6 +45,8 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     public Add_Movie_dash() {
         initComponents();
         
+        lblLoadingIndicator.setVisible(false); // API Loading label visibility off
+        
         //Fetch Ratings Action Listener for the button
     btnFetchRatings.addActionListener(new ActionListener() {
     public void actionPerformed(ActionEvent e) {
@@ -150,6 +152,8 @@ public class Add_Movie_dash extends javax.swing.JFrame {
     }
     // FETCH MOVIE RATINGS (EXTERNAL)
     public void fetchMovieRatings(String movieTitle, String movieYear) {
+    lblLoadingIndicator.setVisible(true);  // Show loading indicator
+    
     String apiKey = "935a933f"; // Your OMDb API key
     String urlString = "http://www.omdbapi.com/?t=" + movieTitle + "&y=" + movieYear + "&apikey=" + apiKey;
     
@@ -182,7 +186,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
             if (jsonObj.has("Response") && jsonObj.getString("Response").equals("True")) {
                 if (jsonObj.has("imdbRating") && jsonObj.has("Ratings")) {
                     String imdbRating = jsonObj.getString("imdbRating");
-                    String rottenTomatoesRating = jsonObj.getJSONArray("Ratings").getJSONObject(1).getString("Value");
+                    String rottenTomatoesRating = jsonObj.getJSONArray("Ratings").getJSONObject(1).getString("Value").replace("%", "");
 
                     // Update the text fields
                     JTF_IMDb_Rating.setText(imdbRating);
@@ -195,12 +199,18 @@ public class Add_Movie_dash extends javax.swing.JFrame {
                 // Movie not found
                 JOptionPane.showMessageDialog(this, "Movie not found.");
             }
-        } else {
+            // Hide loading indicator
+            lblLoadingIndicator.setVisible(false);
+
+        } 
+        else {
             // Handle other errors
-            System.out.println("GET request failed. Response Code : " + responseCode);
+            System.out.println("GET request failed. Input Ratings Manually.  Response Code : " + responseCode);
+            lblLoadingIndicator.setVisible(false); // Hide loading indicator even if it fails
         }
     } catch (Exception e) {
         e.printStackTrace();
+        lblLoadingIndicator.setVisible(false); // Hide loading indicator in case of an exception
     }
 }
     
@@ -290,7 +300,9 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCB_MavenCinema_No = new javax.swing.JCheckBox();
         JBTN_Preview_Youtube_Video = new javax.swing.JButton();
         JTF_Youtube_URL = new javax.swing.JTextField();
+        lblLoadingIndicator = new javax.swing.JLabel();
         btnFetchRatings = new javax.swing.JButton();
+        jLabel21 = new javax.swing.JLabel();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -386,8 +398,8 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cast");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
-        jPanel1.add(JTF_IMDb_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 70, 30));
-        jPanel1.add(JTF_Rotten_Tomatoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 240, 70, 30));
+        jPanel1.add(JTF_IMDb_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 50, 30));
+        jPanel1.add(JTF_Rotten_Tomatoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 230, 50, 30));
         jPanel1.add(JTF_Director, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 280, 230, 30));
         jPanel1.add(JTF_Composer, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 230, 30));
 
@@ -410,7 +422,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Rotten Tomatoes");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 240, -1, 30));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 230, -1, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
@@ -573,7 +585,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel17.setForeground(new java.awt.Color(255, 255, 255));
         jLabel17.setText("%");
-        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 240, 30, 30));
+        jPanel1.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(630, 230, 30, 30));
 
         jCheckBox_GENRE_Action.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Action.setForeground(new java.awt.Color(255, 255, 255));
@@ -583,7 +595,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jCheckBox_GENRE_Adventure.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Adventure.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Adventure.setText("Adventure");
-        jPanel1.add(jCheckBox_GENRE_Adventure, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 430, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Adventure, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 430, -1, -1));
 
         jCheckBox_GENRE_Animation.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Animation.setForeground(new java.awt.Color(255, 255, 255));
@@ -598,7 +610,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jCheckBox_GENRE_Biography.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Biography.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Biography.setText("Biography");
-        jPanel1.add(jCheckBox_GENRE_Biography, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 470, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Biography, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 470, -1, -1));
 
         jCheckBox_GENRE_Comedy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Comedy.setForeground(new java.awt.Color(255, 255, 255));
@@ -613,12 +625,12 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jCheckBox_GENRE_Documentary.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Documentary.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Documentary.setText("Documentary");
-        jPanel1.add(jCheckBox_GENRE_Documentary, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 490, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Documentary, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 490, -1, -1));
 
         jCheckBox_GENRE_Drama.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Drama.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Drama.setText("Drama");
-        jPanel1.add(jCheckBox_GENRE_Drama, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 430, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Drama, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, -1, -1));
 
         jCheckBox_GENRE_Family.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Family.setForeground(new java.awt.Color(255, 255, 255));
@@ -633,42 +645,42 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jCheckBox_GENRE_FilmNoir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_FilmNoir.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_FilmNoir.setText("Film Noir");
-        jPanel1.add(jCheckBox_GENRE_FilmNoir, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 470, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_FilmNoir, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 470, -1, -1));
 
         jCheckBox_GENRE_Historical.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Historical.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Historical.setText("Historical");
-        jPanel1.add(jCheckBox_GENRE_Historical, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 490, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Historical, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 490, -1, -1));
 
         jCheckBox_GENRE_Horror.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Horror.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Horror.setText("Horror");
-        jPanel1.add(jCheckBox_GENRE_Horror, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 510, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Horror, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 510, -1, -1));
 
         jCheckBox_GENRE_Musical.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Musical.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Musical.setText("Musical");
-        jPanel1.add(jCheckBox_GENRE_Musical, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 510, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Musical, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 510, -1, -1));
 
         jCheckBox_GENRE_Mystery.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Mystery.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Mystery.setText("Mystery");
-        jPanel1.add(jCheckBox_GENRE_Mystery, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 430, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Mystery, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 430, -1, -1));
 
         jCheckBox_GENRE_Romance.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Romance.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Romance.setText("Romance");
-        jPanel1.add(jCheckBox_GENRE_Romance, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 450, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Romance, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 450, -1, -1));
 
         jCheckBox_GENRE_ScienceFiction.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_ScienceFiction.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_ScienceFiction.setText("Science Fiction");
-        jPanel1.add(jCheckBox_GENRE_ScienceFiction, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 450, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_ScienceFiction, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 450, -1, -1));
 
         jCheckBox_GENRE_Thriller.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Thriller.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Thriller.setText("Thriller");
-        jPanel1.add(jCheckBox_GENRE_Thriller, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 470, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Thriller, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 470, -1, -1));
 
         jCheckBox_GENRE_War.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_War.setForeground(new java.awt.Color(255, 255, 255));
@@ -678,7 +690,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jCheckBox_GENRE_Western.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Western.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Western.setText("Western");
-        jPanel1.add(jCheckBox_GENRE_Western, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 510, -1, -1));
+        jPanel1.add(jCheckBox_GENRE_Western, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 510, -1, -1));
 
         lblImagePreview.setForeground(new java.awt.Color(255, 255, 255));
         lblImagePreview.setBorder(javax.swing.BorderFactory.createEtchedBorder(null, new java.awt.Color(153, 153, 153)));
@@ -732,9 +744,17 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jPanel1.add(JBTN_Preview_Youtube_Video, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 350, 110, 30));
         jPanel1.add(JTF_Youtube_URL, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 350, 310, 30));
 
-        btnFetchRatings.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblLoadingIndicator.setFont(new java.awt.Font("Segoe UI", 3, 13)); // NOI18N
+        lblLoadingIndicator.setForeground(new java.awt.Color(255, 255, 255));
+        lblLoadingIndicator.setText("Loading...");
+        jPanel1.add(lblLoadingIndicator, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 200, 80, 30));
+
         btnFetchRatings.setText("FETCH RATINGS");
-        jPanel1.add(btnFetchRatings, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 190, 140, 80));
+        jPanel1.add(btnFetchRatings, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 190, 170, 50));
+
+        jLabel21.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel21.setText("Always Fetch Rating Accurate Results*");
+        jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 246, 240, 20));
 
         BG.setForeground(new java.awt.Color(255, 255, 255));
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/blur.jpg"))); // NOI18N
@@ -1540,16 +1560,7 @@ if (!isMavenCinemaNo) {
 
 
         pst.setString(16, JTF_Movie_Name.getText());
-        //pst.setString(17, imagePath);
-       /* 
-        // Fetch the existing image path from DB
-        if(imagePath != null) {
-        pst.setString(17, imagePath);
-        } else {
-        String existingImagePath = getExistingImagePathForMovie(JTF_Movie_Name.getText());
-        pst.setString(17, existingImagePath);
-}
-        */
+        
         int result = pst.executeUpdate();
         if (result > 0) {
             JOptionPane.showMessageDialog(null, "Movie Updated Successfully!");
@@ -1843,6 +1854,7 @@ if (!isMavenCinemaNo) {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1855,13 +1867,8 @@ if (!isMavenCinemaNo) {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblImagePreview;
+    private javax.swing.JLabel lblLoadingIndicator;
     // End of variables declaration//GEN-END:variables
     // User-defined variables
     private String imagePath;
-    private JFrame youtubePreviewFrame;
-    private WebEngine webEngine;
-    private JFXPanel jfxPanel;
-
-
-
 }
