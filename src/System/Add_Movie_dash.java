@@ -30,17 +30,38 @@ import javax.swing.JFrame;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.Desktop;
-import java.net.URI;
-
-
-
-
+import java.net.URI; //Fetching External Ratings
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import org.json.JSONObject;
+import java.awt.event.ActionEvent;//required classes for fetch rating action listener 
+import java.awt.event.ActionListener;
 
 
 public class Add_Movie_dash extends javax.swing.JFrame {
 
     public Add_Movie_dash() {
         initComponents();
+        
+        //Fetch Ratings Action Listener for the button
+    btnFetchRatings.addActionListener(new ActionListener() {
+    public void actionPerformed(ActionEvent e) {
+        // Fetch the movie title and year from the text fields
+        String movieTitle = JTF_Movie_Name.getText();
+        String movieYear = JTF_Year.getText();
+        
+        // Check if both fields are filled out
+        if (movieTitle.isEmpty() || movieYear.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Both movie title and year must be provided.");
+            return;
+        }
+
+        // If both fields are filled out, fetch the ratings
+        fetchMovieRatings(movieTitle, movieYear);
+    }
+});
         
         //Youtube Preview
         JBTN_Preview_Youtube_Video.addActionListener(new java.awt.event.ActionListener() {
@@ -127,6 +148,61 @@ public class Add_Movie_dash extends javax.swing.JFrame {
 
 
     }
+    // FETCH MOVIE RATINGS (EXTERNAL)
+    public void fetchMovieRatings(String movieTitle, String movieYear) {
+    String apiKey = "935a933f"; // Your OMDb API key
+    String urlString = "http://www.omdbapi.com/?t=" + movieTitle + "&y=" + movieYear + "&apikey=" + apiKey;
+    
+    /*movieYear: This is the year of release for the movie. We'll get this from the UI and pass it to our function.
+    &y=: This is how you specify the year in the OMDb API.*/
+    
+    try {
+        URL url = new URL(urlString);
+        HttpURLConnection con = (HttpURLConnection) url.openConnection();
+        
+        // Optional default is GET
+        con.setRequestMethod("GET");
+
+        int responseCode = con.getResponseCode();
+
+        if (responseCode == 200) { // Success
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+            
+            // Parse JSON
+            JSONObject jsonObj = new JSONObject(response.toString());
+            
+            // Check if movie was found and keys exist
+            if (jsonObj.has("Response") && jsonObj.getString("Response").equals("True")) {
+                if (jsonObj.has("imdbRating") && jsonObj.has("Ratings")) {
+                    String imdbRating = jsonObj.getString("imdbRating");
+                    String rottenTomatoesRating = jsonObj.getJSONArray("Ratings").getJSONObject(1).getString("Value");
+
+                    // Update the text fields
+                    JTF_IMDb_Rating.setText(imdbRating);
+                    JTF_Rotten_Tomatoes.setText(rottenTomatoesRating);
+                } else {
+                    // Show a message if keys are missing
+                    JOptionPane.showMessageDialog(this, "Could not find ratings for the movie.");
+                }
+            } else {
+                // Movie not found
+                JOptionPane.showMessageDialog(this, "Movie not found.");
+            }
+        } else {
+            // Handle other errors
+            System.out.println("GET request failed. Response Code : " + responseCode);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
     
 
     @SuppressWarnings("unchecked")
@@ -214,6 +290,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JCB_MavenCinema_No = new javax.swing.JCheckBox();
         JBTN_Preview_Youtube_Video = new javax.swing.JButton();
         JTF_Youtube_URL = new javax.swing.JTextField();
+        btnFetchRatings = new javax.swing.JButton();
         BG = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -309,7 +386,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         jLabel7.setForeground(new java.awt.Color(255, 255, 255));
         jLabel7.setText("Cast");
         jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 110, -1, -1));
-        jPanel1.add(JTF_IMDb_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 60, 30));
+        jPanel1.add(JTF_IMDb_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 190, 70, 30));
         jPanel1.add(JTF_Rotten_Tomatoes, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 240, 70, 30));
         jPanel1.add(JTF_Director, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 280, 230, 30));
         jPanel1.add(JTF_Composer, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 320, 230, 30));
@@ -654,6 +731,10 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         JBTN_Preview_Youtube_Video.setText("Preview");
         jPanel1.add(JBTN_Preview_Youtube_Video, new org.netbeans.lib.awtextra.AbsoluteConstraints(1240, 350, 110, 30));
         jPanel1.add(JTF_Youtube_URL, new org.netbeans.lib.awtextra.AbsoluteConstraints(920, 350, 310, 30));
+
+        btnFetchRatings.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btnFetchRatings.setText("FETCH RATINGS");
+        jPanel1.add(btnFetchRatings, new org.netbeans.lib.awtextra.AbsoluteConstraints(690, 190, 140, 80));
 
         BG.setForeground(new java.awt.Color(255, 255, 255));
         BG.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/blur.jpg"))); // NOI18N
@@ -1728,6 +1809,7 @@ if (!isMavenCinemaNo) {
     private javax.swing.JTextArea JTextArea_Cast;
     private javax.swing.JTextArea JTextArea_Description;
     private javax.swing.JButton btnChooseImage;
+    private javax.swing.JButton btnFetchRatings;
     private javax.swing.JCheckBox jCheckBox_GENRE_Action;
     private javax.swing.JCheckBox jCheckBox_GENRE_Adventure;
     private javax.swing.JCheckBox jCheckBox_GENRE_Animation;
