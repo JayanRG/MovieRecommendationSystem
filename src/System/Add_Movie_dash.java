@@ -757,7 +757,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         btnFetchRatings.setText("FETCH RATINGS");
         jPanel1.add(btnFetchRatings, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 190, 170, 50));
 
-        jLabel21.setForeground(new java.awt.Color(204, 0, 0));
+        jLabel21.setForeground(new java.awt.Color(204, 204, 204));
         jLabel21.setText("Always Fetch Rating for Accurate Results*");
         jPanel1.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 246, 240, 20));
         jPanel1.add(JTF_MainImage_URL, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 120, 250, 30));
@@ -803,39 +803,59 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         return false;
     }
 
-    // Validation for Movie Genre (Cannot be empty)
-    boolean isGenreSelected = jCheckBox_GENRE_Action.isSelected() ||
-    jCheckBox_GENRE_Adventure.isSelected() ||
-    jCheckBox_GENRE_Animation.isSelected() ||
-    jCheckBox_GENRE_Biography.isSelected() ||
-    jCheckBox_GENRE_Comedy.isSelected() ||
-    jCheckBox_GENRE_Crime.isSelected() ||
-    jCheckBox_GENRE_Documentary.isSelected() ||
-    jCheckBox_GENRE_Drama.isSelected() ||
-    jCheckBox_GENRE_Family.isSelected() ||
-    jCheckBox_GENRE_Fantasy.isSelected() ||
-    jCheckBox_GENRE_FilmNoir.isSelected() ||
-    jCheckBox_GENRE_Historical.isSelected() ||
-    jCheckBox_GENRE_Horror.isSelected() ||
-    jCheckBox_GENRE_Musical.isSelected() ||
-    jCheckBox_GENRE_Mystery.isSelected() ||
-    jCheckBox_GENRE_Romance.isSelected() ||
-    jCheckBox_GENRE_ScienceFiction.isSelected() ||
-    jCheckBox_GENRE_Thriller.isSelected() ||
-    jCheckBox_GENRE_War.isSelected() ||
-    jCheckBox_GENRE_Western.isSelected();
+ // Validation for Movie Genre (Cannot be empty)
+if (!jCheckBox_GENRE_Action.isSelected() && 
+    !jCheckBox_GENRE_Adventure.isSelected() &&
+    !jCheckBox_GENRE_Animation.isSelected() &&
+    !jCheckBox_GENRE_Biography.isSelected() &&
+    !jCheckBox_GENRE_Comedy.isSelected() &&
+    !jCheckBox_GENRE_Crime.isSelected() &&
+    !jCheckBox_GENRE_Documentary.isSelected() &&
+    !jCheckBox_GENRE_Drama.isSelected() &&
+    !jCheckBox_GENRE_Family.isSelected() &&
+    !jCheckBox_GENRE_Fantasy.isSelected() &&
+    !jCheckBox_GENRE_FilmNoir.isSelected() &&
+    !jCheckBox_GENRE_Historical.isSelected() &&
+    !jCheckBox_GENRE_Horror.isSelected() &&
+    !jCheckBox_GENRE_Musical.isSelected() &&
+    !jCheckBox_GENRE_Mystery.isSelected() &&
+    !jCheckBox_GENRE_Romance.isSelected() &&
+    !jCheckBox_GENRE_ScienceFiction.isSelected() &&
+    !jCheckBox_GENRE_Thriller.isSelected() &&
+    !jCheckBox_GENRE_War.isSelected() &&
+    !jCheckBox_GENRE_Western.isSelected()) {
 
-    if (!isGenreSelected) {
-    JOptionPane.showMessageDialog(null, "Select at least one Genre.");
+    JOptionPane.showMessageDialog(null, "At least one genre must be selected.");
     return false;
 }
 
+// New Validation for Movie Genre (Between 1 to 4 genres should be selected)
+int genreCount = 0;
+if (jCheckBox_GENRE_Action.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Adventure.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Animation.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Biography.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Comedy.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Crime.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Documentary.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Drama.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Family.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Fantasy.isSelected()) genreCount++;
+if (jCheckBox_GENRE_FilmNoir.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Historical.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Horror.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Musical.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Mystery.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Romance.isSelected()) genreCount++;
+if (jCheckBox_GENRE_ScienceFiction.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Thriller.isSelected()) genreCount++;
+if (jCheckBox_GENRE_War.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Western.isSelected()) genreCount++;
 
-    // Validation for Movie Description (Should be more than 4 characters)
-    if (JTextArea_Description.getText().trim().length() <= 4) {
-        JOptionPane.showMessageDialog(null, "Description should be more than 4 characters.");
-        return false;
-    }
+if (genreCount < 1 || genreCount > 4) {
+    JOptionPane.showMessageDialog(null, "Between 1 to 4 genres should be selected.");
+    return false;
+}
 
     // Validation for Movie Rating (Should be between 0 and 10)
     try {
@@ -995,51 +1015,61 @@ private boolean isValidYoutubeUrl(String url) {  //This is a helper method that 
         return;
 }
 
-        // Validation for Movie Year (Should be current year + 3 or below)
+        // Validation for Movie Year (Should be between 1888 and current year + 2)
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+        int minYear = 1888;
+        int maxYear = currentYear + 2;
         int enteredYear;
-try {
-    enteredYear = Integer.parseInt(JTF_Year.getText());
-    if (enteredYear > currentYear + 3 || enteredYear < currentYear) {
-        JOptionPane.showMessageDialog(null, "Invalid movie year. It should be between " + currentYear + " and " + (currentYear + 3) + ".");
-        return;
+
+    try {
+        enteredYear = Integer.parseInt(JTF_Year.getText());
+         if (enteredYear < minYear || enteredYear > maxYear) {
+         JOptionPane.showMessageDialog(null, "Invalid movie year. It should be between " + minYear + " and " + maxYear + ".");
+         return;
     }
-} catch (NumberFormatException e) {
+}   
+    catch (NumberFormatException e) {
     JOptionPane.showMessageDialog(null, "Invalid movie year format.");
     return;
 }
 
-// Validation for Movie Genre (Cannot be empty)
-if (!jCheckBox_GENRE_Action.isSelected() && 
-    !jCheckBox_GENRE_Adventure.isSelected() &&
-    !jCheckBox_GENRE_Animation.isSelected() &&
-    !jCheckBox_GENRE_Biography.isSelected() &&
-    !jCheckBox_GENRE_Comedy.isSelected() &&
-    !jCheckBox_GENRE_Crime.isSelected() &&
-    !jCheckBox_GENRE_Documentary.isSelected() &&
-    !jCheckBox_GENRE_Drama.isSelected() &&
-    !jCheckBox_GENRE_Family.isSelected() &&
-    !jCheckBox_GENRE_Fantasy.isSelected() &&
-    !jCheckBox_GENRE_FilmNoir.isSelected() &&
-    !jCheckBox_GENRE_Historical.isSelected() &&
-    !jCheckBox_GENRE_Horror.isSelected() &&
-    !jCheckBox_GENRE_Musical.isSelected() &&
-    !jCheckBox_GENRE_Mystery.isSelected() &&
-    !jCheckBox_GENRE_Romance.isSelected() &&
-    !jCheckBox_GENRE_ScienceFiction.isSelected() &&
-    !jCheckBox_GENRE_Thriller.isSelected() &&
-    !jCheckBox_GENRE_War.isSelected() &&
-    !jCheckBox_GENRE_Western.isSelected()) {
 
-    JOptionPane.showMessageDialog(null, "At least one genre must be selected.");
+// Validation for Movie Genre (Between 1 to 4 genres should be selected)
+int genreCount = 0;
+if (jCheckBox_GENRE_Action.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Adventure.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Animation.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Biography.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Comedy.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Crime.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Documentary.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Drama.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Family.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Fantasy.isSelected()) genreCount++;
+if (jCheckBox_GENRE_FilmNoir.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Historical.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Horror.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Musical.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Mystery.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Romance.isSelected()) genreCount++;
+if (jCheckBox_GENRE_ScienceFiction.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Thriller.isSelected()) genreCount++;
+if (jCheckBox_GENRE_War.isSelected()) genreCount++;
+if (jCheckBox_GENRE_Western.isSelected()) genreCount++;
+
+if (genreCount < 1 || genreCount > 4) {
+    JOptionPane.showMessageDialog(null, "Between 1 to 4 genres should be selected.");
     return;
 }
 
-// Validation for Movie Description (Should be more than 4 characters)
-if (JTextArea_Description.getText().trim().length() <= 4) {
-    JOptionPane.showMessageDialog(null, "Description should be more than 4 characters.");
+// Validation for Movie Description (Should be more than 3 characters and less than 299 characters)
+String description = JTextArea_Description.getText().trim();
+int descriptionLength = description.length();
+if (descriptionLength <= 3 || descriptionLength >= 299) {
+    JOptionPane.showMessageDialog(null, "Description should be more than 3 characters and less than 299 characters.");
     return;
 }
+
 
 // Validation for Movie Rating (Should be between 0 and 10)
 try {

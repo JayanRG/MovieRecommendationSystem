@@ -5,7 +5,12 @@ import java.sql.DriverManager; // DB connection
 import java.sql.ResultSet;     // DB connection
 import java.sql.SQLException;  // DB connection
 import java.sql.Statement;     // DB connection
-
+import javax.swing.ImageIcon; //fetch Image
+import javax.swing.JLabel;
+import java.awt.Image;                             //classes required for cropping the main image
+import java.awt.image.BufferedImage;
+import java.awt.image.CropImageFilter;
+import java.awt.image.FilteredImageSource;
 
 
 public class User_Dash extends javax.swing.JFrame {
@@ -17,6 +22,11 @@ public class User_Dash extends javax.swing.JFrame {
     public User_Dash() {
         initComponents();
         
+        //RESIZE THE WINDOW
+        this.setSize(800, 600);
+        this.setResizable(false);
+
+        
         // Fetch and display the first two movies
         fetchAndDisplayMovies();
     }
@@ -25,18 +35,16 @@ public class User_Dash extends javax.swing.JFrame {
         Connection conn = null;
         Statement stmt = null;
         try {
-            // Register JDBC driver and open a connection
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-            // Execute a query
             stmt = conn.createStatement();
-            String sql = "SELECT * FROM all_movies_db LIMIT 2"; // Fetch first 2 rows <<<<<<<<<<<<<<<<<<<<<<<<<<< should be changed in the future
+            String sql = "SELECT * FROM all_movies_db LIMIT 10"; // Fetch first 10 rows
             ResultSet rs = stmt.executeQuery(sql);
 
-            // Extract data from result set
-            while(rs.next()){
-                // Retrieve data by column name
+            int movieCounter = 0; // To keep track of which movie is processing
+
+            while (rs.next()) {
                 String movieName = rs.getString("movie_name_db");
                 int movieYear = rs.getInt("mov_year_db");
                 String movieGenre = rs.getString("mov_genre_db");
@@ -45,27 +53,147 @@ public class User_Dash extends javax.swing.JFrame {
                 float rottenTomatoRating = rs.getFloat("Rotten_Tomatos_db");
                 String imagePath = rs.getString("image_path");
 
-                // Display values (We'll implement this part next)
+                switch (movieCounter) {
+                    case 0:
+                        populateMovieDetails(JLB_MOVIE1_Name, JLB_MOVIE1_YearGenre, JLB_MOVIE1_Rating, lblMoviePreview1, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 1:
+                        populateMovieDetails(JLB_MOVIE2_Name, JLB_MOVIE2_YearGenre, JLB_MOVIE2_Rating, lblMoviePreview2, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 2:
+                        populateMovieDetails(JLB_MOVIE3_Name, JLB_MOVIE3_YearGenre, JLB_MOVIE3_Rating, lblMoviePreview3, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 3:
+                        populateMovieDetails(JLB_MOVIE4_Name, JLB_MOVIE4_YearGenre, JLB_MOVIE4_Rating, lblMoviePreview4, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 4:
+                        populateMovieDetails(JLB_MOVIE5_Name, JLB_MOVIE5_YearGenre, JLB_MOVIE5_Rating, lblMoviePreview5, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 5:
+                        populateMovieDetails(JLB_MOVIE6_Name, JLB_MOVIE6_YearGenre, JLB_MOVIE6_Rating, lblMoviePreview6, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 6:
+                        populateMovieDetails(JLB_MOVIE7_Name, JLB_MOVIE7_YearGenre, JLB_MOVIE7_Rating, lblMoviePreview7, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 7:
+                        populateMovieDetails(JLB_MOVIE8_Name, JLB_MOVIE8_YearGenre, JLB_MOVIE8_Rating, lblMoviePreview8, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 8:
+                        populateMovieDetails(JLB_MOVIE9_Name, JLB_MOVIE9_YearGenre, JLB_MOVIE9_Rating, lblMoviePreview9, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    case 9:
+                        populateMovieDetails(JLB_MOVIE10_Name, JLB_MOVIE10_YearGenre, JLB_MOVIE10_Rating, lblMoviePreview10, movieName, movieYear, movieGenre, movieRating, imdbRating, rottenTomatoRating, imagePath);
+                        break;
+                    default:
+                    // Do something if there are more than 10 movies, or simply break
+                        break;
+                }
+
+                movieCounter++;
             }
+
+            // HIDE UNUSED LABELS
+    for (int i = movieCounter; i < 10; i++) {
+        switch (i) {
+            case 0:
+                JLB_MOVIE1_Name.setVisible(false);
+                JLB_MOVIE1_YearGenre.setVisible(false);
+                JLB_MOVIE1_Rating.setVisible(false);
+                lblMoviePreview1.setVisible(false);
+                break;
+            case 1:
+                JLB_MOVIE2_Name.setVisible(false);
+                JLB_MOVIE2_YearGenre.setVisible(false);
+                JLB_MOVIE2_Rating.setVisible(false);
+                lblMoviePreview2.setVisible(false);
+                break;
+            case 2:
+                JLB_MOVIE3_Name.setVisible(false);
+                JLB_MOVIE3_YearGenre.setVisible(false);
+                JLB_MOVIE3_Rating.setVisible(false);
+                lblMoviePreview3.setVisible(false);
+                break;
+            case 3:
+                JLB_MOVIE4_Name.setVisible(false);
+                JLB_MOVIE4_YearGenre.setVisible(false);
+                JLB_MOVIE4_Rating.setVisible(false);
+                lblMoviePreview4.setVisible(false);
+                break;
+            case 4:
+                JLB_MOVIE5_Name.setVisible(false);
+                JLB_MOVIE5_YearGenre.setVisible(false);
+                JLB_MOVIE5_Rating.setVisible(false);
+                lblMoviePreview5.setVisible(false);
+                break;
+            case 5:
+                JLB_MOVIE6_Name.setVisible(false);
+                JLB_MOVIE6_YearGenre.setVisible(false);
+                JLB_MOVIE6_Rating.setVisible(false);
+                lblMoviePreview6.setVisible(false);
+                break;
+            case 6:
+                JLB_MOVIE7_Name.setVisible(false);
+                JLB_MOVIE7_YearGenre.setVisible(false);
+                JLB_MOVIE7_Rating.setVisible(false);
+                lblMoviePreview7.setVisible(false);
+                break;
+            case 7:
+                JLB_MOVIE8_Name.setVisible(false);
+                JLB_MOVIE8_YearGenre.setVisible(false);
+                JLB_MOVIE8_Rating.setVisible(false);
+                lblMoviePreview8.setVisible(false);
+                break;
+            case 8:
+                JLB_MOVIE9_Name.setVisible(false);
+                JLB_MOVIE9_YearGenre.setVisible(false);
+                JLB_MOVIE9_Rating.setVisible(false);
+                lblMoviePreview9.setVisible(false);
+                break;
+            case 9:
+                JLB_MOVIE10_Name.setVisible(false);
+                JLB_MOVIE10_YearGenre.setVisible(false);
+                JLB_MOVIE10_Rating.setVisible(false);
+                lblMoviePreview10.setVisible(false);
+                break;
+            // Add similar cases for additional movie labels if you have more than 10.
+            default:
+                break;
+        }
+    }
+            
+            
+            
             rs.close();
-        } catch(SQLException se) {
-            // Handle errors for JDBC
+        } catch (SQLException se) {
             se.printStackTrace();
-        } catch(Exception e) {
-            // Handle errors for Class.forName
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            // finally block used to close resources
             try {
-                if(stmt != null) stmt.close();
-            } catch(SQLException se2) {}
+                if (stmt != null) stmt.close();
+            } catch (SQLException se2) {}
             try {
-                if(conn != null) conn.close();
-            } catch(SQLException se) {
+                if (conn != null) conn.close();
+            } catch (SQLException se) {
                 se.printStackTrace();
             }
         }
     }
+
+    private void populateMovieDetails(JLabel nameLabel, JLabel yearGenreLabel, JLabel ratingLabel, JLabel previewLabel, String movieName, int movieYear, String movieGenre, float movieRating, float imdbRating, float rottenTomatoRating, String imagePath) {
+        nameLabel.setText(movieName);
+        yearGenreLabel.setText(movieYear + " | " + movieGenre);
+        ratingLabel.setText("Maven:" + movieRating + " | IMDb:" + imdbRating + " | Rotten:" + rottenTomatoRating + "%");
+
+        // Resize image
+        ImageIcon imageIcon = new ImageIcon(imagePath);
+        Image image = imageIcon.getImage();
+        Image newImage = image.getScaledInstance(previewLabel.getWidth(), previewLabel.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon finalImage = new ImageIcon(newImage);
+        previewLabel.setIcon(finalImage);
+    }
+
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
