@@ -111,7 +111,7 @@ public class Customer_Dash extends javax.swing.JFrame {
         jPanel1.add(jComboBox_MOVIE4_WatchStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(930, 320, -1, -1));
 
         Background_Image.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/Blue BG.jpg"))); // NOI18N
-        jPanel1.add(Background_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
+        jPanel1.add(Background_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, -80, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
