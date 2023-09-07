@@ -210,6 +210,7 @@ public class Add_Movie_dash extends javax.swing.JFrame {
         else {
             // Handle other errors
             System.out.println("GET request failed. Input Ratings Manually.  Response Code : " + responseCode);
+            JOptionPane.showMessageDialog(this, "GET request failed. Input Ratings Manually.");
             lblLoadingIndicator.setVisible(false); // Hide loading indicator even if it fails
         }
     } catch (Exception e) {
