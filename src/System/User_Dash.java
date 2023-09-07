@@ -11,8 +11,6 @@ import java.awt.Image;                             //classes required for croppi
 import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
-import javax.swing.*;//dynamically create new labels to display movies
-import java.awt.*;
 
 
 
@@ -21,6 +19,13 @@ public class User_Dash extends javax.swing.JFrame {
     static final String DB_URL = "jdbc:mysql://localhost:3306/movie_db";
     static final String USER = "root";
     static final String PASS = "";
+    
+    private int totalRecords = 0;  // Define totalRecords here
+    // New state variables for pagination - will help in keeping track of which set of movies to display. 
+    private int currentPage = 1;  // Keeps track of the current page
+    private int recordsPerPage = 35;  // Number of records to show per page
+    private MovieFilter currentFilter; // pagination with filters
+
 
     public User_Dash() {
         initComponents();
@@ -29,21 +34,69 @@ public class User_Dash extends javax.swing.JFrame {
         this.setSize(800, 600);
         this.setResizable(false);
 
+        // Initialize currentPage to 1
+        currentPage = 1;  // this line ensures that currentPage starts at 1 every time this class is instantiated
         
         // Fetch and display the first two movies
-        fetchAndDisplayMovies();
+        MovieFilter movieFilter = new MovieFilter();
+        movieFilter.setFilterMavenCinema(false); // Or true, depending on your need
+        fetchAndDisplayMovies(movieFilter);
     }
     
-    private void fetchAndDisplayMovies() {
+    //argument moviefilter  method is used apply various filters based on the properties set in the MovieFilter object
+    private void fetchAndDisplayMovies(MovieFilter movieFilter) {
+        
+        //method to set all labels visible
+        setAllLabelsVisible();
+    
         Connection conn = null;
         Statement stmt = null;
+        
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             stmt = conn.createStatement();
-            String sql = "SELECT * FROM all_movies_db LIMIT 35";
-            ResultSet rs = stmt.executeQuery(sql);
+            
+            // New code to count filtered records
+            String countSql = "SELECT COUNT(*) FROM all_movies_db";
+            if (movieFilter.getFilterMavenCinema()) {
+                countSql += " WHERE Maven_Cinema_Activity = 'YES'";
+        }
+            ResultSet rsCount = stmt.executeQuery(countSql);
+            int totalRecords = 0; // Declare a new local variable to hold the count
+            if (rsCount.next()) {
+                totalRecords = rsCount.getInt(1);
+    }
+            rsCount.close(); // Close the ResultSet for the count query
+            
+            // New code to adjust recordsPerPage
+            if (totalRecords <= 35) {
+               recordsPerPage = totalRecords;  // If the filtered records are less than or equal to 35, show them all in one page
+} 
+            else {
+            recordsPerPage = 35; // Otherwise, stick to the original page size
+}
+
+            
+            // Calculate the starting record and the ending record for each page
+            int startRecord = (currentPage - 1) * recordsPerPage; // 
+            
+            System.out.println("Current Page: " + currentPage);
+            System.out.println("Start Record: " + startRecord);
+            
+            // Updated the SQL query to fetch based on the pagination variables-calculation based on currentPage and recordsPerPage.
+            //The LIMIT clause now has two arguments-- first argument specifies the starting point, and the second argument specifies the number ofrecords to retrieve.
+            StringBuilder sql = new StringBuilder("SELECT * FROM all_movies_db");
+        
+            // If the Maven Cinema filter is enabled, add it to the query
+            if (movieFilter.getFilterMavenCinema()) {
+            sql.append(" WHERE Maven_Cinema_Activity = 'YES'");
+            }
+
+            sql.append(" LIMIT ").append(startRecord).append(", ").append(recordsPerPage);
+            
+            ResultSet rs = stmt.executeQuery(sql.toString());
 
             int movieCounter = 0; // To keep track of which movie is processing
 
@@ -406,8 +459,18 @@ public class User_Dash extends javax.swing.JFrame {
                 se.printStackTrace();
             }
         }
+         updatePaginationButtons();
     }
 
+//determine the number of total pages available and will enable or disable the
+    private void updatePaginationButtons() {
+    int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+
+    JBTN_PrevPage.setEnabled(currentPage > 1);
+    JBTN_NextPage.setEnabled(currentPage < totalPages);
+}
+
+    
     //POPULATE MOVIE DETAILS
     private void populateMovieDetails(JLabel nameLabel, JLabel yearGenreLabel, JLabel ratingLabel, JLabel previewLabel, String movieName, int movieYear, String movieGenre, float movieRating, float imdbRating, float rottenTomatoRating, String imagePath) {
         nameLabel.setText(movieName);
@@ -648,7 +711,7 @@ public class User_Dash extends javax.swing.JFrame {
         JBTN_Search.setBackground(new java.awt.Color(0, 0, 0));
         JBTN_Search.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JBTN_Search.setForeground(new java.awt.Color(255, 255, 255));
-        JBTN_Search.setText("SEARCH");
+        JBTN_Search.setText("PROFILE");
         JBTN_Search.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBTN_SearchActionPerformed(evt);
@@ -1464,12 +1527,22 @@ public class User_Dash extends javax.swing.JFrame {
         jPanel_MadeForYou.add(JBTN_SearchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 80, 170, 40));
 
         JBTN_PrevPage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        JBTN_PrevPage.setText("<< Previouse Page");
-        jPanel_MadeForYou.add(JBTN_PrevPage, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 2480, 180, 40));
+        JBTN_PrevPage.setText("<< Previous Page");
+        JBTN_PrevPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_PrevPageActionPerformed(evt);
+            }
+        });
+        jPanel_MadeForYou.add(JBTN_PrevPage, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 2510, 180, 40));
 
         JBTN_NextPage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         JBTN_NextPage.setText("Next Page >>");
-        jPanel_MadeForYou.add(JBTN_NextPage, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 2480, 170, 40));
+        JBTN_NextPage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_NextPageActionPerformed(evt);
+            }
+        });
+        jPanel_MadeForYou.add(JBTN_NextPage, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 2510, 170, 40));
 
         jScrollPane1.setViewportView(jPanel_MadeForYou);
 
@@ -1485,7 +1558,19 @@ public class User_Dash extends javax.swing.JFrame {
     }//GEN-LAST:event_JBTN_Made_For_YouActionPerformed
 
     private void JBTN_MavenCinemaMoviesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_MavenCinemaMoviesActionPerformed
+        // Create a MovieFilter object and set the Maven Cinema filter to true
+        currentFilter = new MovieFilter(); // Create a new MovieFilter object
+        currentFilter.setFilterMavenCinema(true); // Set the Maven Cinema filter to true
+
+        // Fetch and display the movies with the new filter
+        fetchAndDisplayMovies(currentFilter);
+
+        //scroll back to the top
+        jScrollPane1.getVerticalScrollBar().setValue(0);
         
+        // Reset current page to the first page
+        currentPage = 1;
+
     }//GEN-LAST:event_JBTN_MavenCinemaMoviesActionPerformed
 
     private void JBTN_TopMavenRatingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_TopMavenRatingsActionPerformed
@@ -1511,6 +1596,210 @@ public class User_Dash extends javax.swing.JFrame {
     private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox2ActionPerformed
+
+    private void setAllLabelsVisible() {//// Set all your labels to visible here
+    
+    JLB_MOVIE1_Name.setVisible(true);
+    JLB_MOVIE1_YearGenre.setVisible(true);
+    JLB_MOVIE1_Rating.setVisible(true);
+    lblMoviePreview1.setVisible(true);
+    
+    JLB_MOVIE2_Name.setVisible(true);
+    JLB_MOVIE2_YearGenre.setVisible(true);
+    JLB_MOVIE2_Rating.setVisible(true);
+    lblMoviePreview2.setVisible(true);
+    
+    JLB_MOVIE3_Name.setVisible(true);
+    JLB_MOVIE3_YearGenre.setVisible(true);
+    JLB_MOVIE3_Rating.setVisible(true);
+    lblMoviePreview3.setVisible(true);
+    
+    JLB_MOVIE4_Name.setVisible(true);
+    JLB_MOVIE4_YearGenre.setVisible(true);
+    JLB_MOVIE4_Rating.setVisible(true);
+    lblMoviePreview4.setVisible(true);
+    
+    JLB_MOVIE5_Name.setVisible(true);
+    JLB_MOVIE5_YearGenre.setVisible(true);
+    JLB_MOVIE5_Rating.setVisible(true);
+    lblMoviePreview5.setVisible(true);
+    
+    JLB_MOVIE6_Name.setVisible(true);
+    JLB_MOVIE6_YearGenre.setVisible(true);
+    JLB_MOVIE6_Rating.setVisible(true);
+    lblMoviePreview6.setVisible(true);
+    
+    JLB_MOVIE7_Name.setVisible(true);
+    JLB_MOVIE7_YearGenre.setVisible(true);
+    JLB_MOVIE7_Rating.setVisible(true);
+    lblMoviePreview7.setVisible(true);
+    
+    JLB_MOVIE8_Name.setVisible(true);
+    JLB_MOVIE8_YearGenre.setVisible(true);
+    JLB_MOVIE8_Rating.setVisible(true);
+    lblMoviePreview8.setVisible(true);
+    
+    JLB_MOVIE9_Name.setVisible(true);
+    JLB_MOVIE9_YearGenre.setVisible(true);
+    JLB_MOVIE9_Rating.setVisible(true);
+    lblMoviePreview9.setVisible(true);
+    
+    JLB_MOVIE10_Name.setVisible(true);
+    JLB_MOVIE10_YearGenre.setVisible(true);
+    JLB_MOVIE10_Rating.setVisible(true);
+    lblMoviePreview10.setVisible(true);
+    
+    JLB_MOVIE11_Name.setVisible(true);
+    JLB_MOVIE11_YearGenre.setVisible(true);
+    JLB_MOVIE11_Rating.setVisible(true);
+    lblMoviePreview11.setVisible(true);
+    
+    JLB_MOVIE12_Name.setVisible(true);
+    JLB_MOVIE12_YearGenre.setVisible(true);
+    JLB_MOVIE12_Rating.setVisible(true);
+    lblMoviePreview12.setVisible(true);
+    
+    JLB_MOVIE13_Name.setVisible(true);
+    JLB_MOVIE13_YearGenre.setVisible(true);
+    JLB_MOVIE13_Rating.setVisible(true);
+    lblMoviePreview13.setVisible(true);
+    
+    JLB_MOVIE14_Name.setVisible(true);
+    JLB_MOVIE14_YearGenre.setVisible(true);
+    JLB_MOVIE14_Rating.setVisible(true);
+    lblMoviePreview14.setVisible(true);
+    
+    JLB_MOVIE15_Name.setVisible(true);
+    JLB_MOVIE15_YearGenre.setVisible(true);
+    JLB_MOVIE15_Rating.setVisible(true);
+    lblMoviePreview15.setVisible(true);
+    
+    JLB_MOVIE16_Name.setVisible(true);
+    JLB_MOVIE16_YearGenre.setVisible(true);
+    JLB_MOVIE16_Rating.setVisible(true);
+    lblMoviePreview16.setVisible(true);
+    
+    JLB_MOVIE17_Name.setVisible(true);
+    JLB_MOVIE17_YearGenre.setVisible(true);
+    JLB_MOVIE17_Rating.setVisible(true);
+    lblMoviePreview17.setVisible(true);
+    
+    JLB_MOVIE18_Name.setVisible(true);
+    JLB_MOVIE18_YearGenre.setVisible(true);
+    JLB_MOVIE18_Rating.setVisible(true);
+    lblMoviePreview18.setVisible(true);
+    
+    JLB_MOVIE19_Name.setVisible(true);
+    JLB_MOVIE19_YearGenre.setVisible(true);
+    JLB_MOVIE19_Rating.setVisible(true);
+    lblMoviePreview19.setVisible(true);
+    
+    JLB_MOVIE20_Name.setVisible(true);
+    JLB_MOVIE20_YearGenre.setVisible(true);
+    JLB_MOVIE20_Rating.setVisible(true);
+    lblMoviePreview20.setVisible(true);
+    
+    JLB_MOVIE21_Name.setVisible(true);
+    JLB_MOVIE21_YearGenre.setVisible(true);
+    JLB_MOVIE21_Rating.setVisible(true);
+    lblMoviePreview21.setVisible(true);
+    
+    JLB_MOVIE22_Name.setVisible(true);
+    JLB_MOVIE22_YearGenre.setVisible(true);
+    JLB_MOVIE22_Rating.setVisible(true);
+    lblMoviePreview22.setVisible(true);
+    
+    JLB_MOVIE23_Name.setVisible(true);
+    JLB_MOVIE23_YearGenre.setVisible(true);
+    JLB_MOVIE23_Rating.setVisible(true);
+    lblMoviePreview23.setVisible(true);
+    
+    JLB_MOVIE24_Name.setVisible(true);
+    JLB_MOVIE24_YearGenre.setVisible(true);
+    JLB_MOVIE24_Rating.setVisible(true);
+    lblMoviePreview24.setVisible(true);
+    
+    JLB_MOVIE25_Name.setVisible(true);
+    JLB_MOVIE25_YearGenre.setVisible(true);
+    JLB_MOVIE25_Rating.setVisible(true);
+    lblMoviePreview25.setVisible(true);
+    
+    JLB_MOVIE26_Name.setVisible(true);
+    JLB_MOVIE26_YearGenre.setVisible(true);
+    JLB_MOVIE26_Rating.setVisible(true);
+    lblMoviePreview26.setVisible(true);
+    
+    JLB_MOVIE27_Name.setVisible(true);
+    JLB_MOVIE27_YearGenre.setVisible(true);
+    JLB_MOVIE27_Rating.setVisible(true);
+    lblMoviePreview27.setVisible(true);
+    
+    JLB_MOVIE28_Name.setVisible(true);
+    JLB_MOVIE28_YearGenre.setVisible(true);
+    JLB_MOVIE28_Rating.setVisible(true);
+    lblMoviePreview28.setVisible(true);
+    
+    JLB_MOVIE29_Name.setVisible(true);
+    JLB_MOVIE29_YearGenre.setVisible(true);
+    JLB_MOVIE29_Rating.setVisible(true);
+    lblMoviePreview29.setVisible(true);
+    
+    JLB_MOVIE30_Name.setVisible(true);
+    JLB_MOVIE30_YearGenre.setVisible(true);
+    JLB_MOVIE30_Rating.setVisible(true);
+    lblMoviePreview30.setVisible(true);
+    
+    JLB_MOVIE31_Name.setVisible(true);
+    JLB_MOVIE31_YearGenre.setVisible(true);
+    JLB_MOVIE31_Rating.setVisible(true);
+    lblMoviePreview31.setVisible(true);
+    
+    JLB_MOVIE32_Name.setVisible(true);
+    JLB_MOVIE32_YearGenre.setVisible(true);
+    JLB_MOVIE32_Rating.setVisible(true);
+    lblMoviePreview32.setVisible(true);
+    
+    JLB_MOVIE33_Name.setVisible(true);
+    JLB_MOVIE33_YearGenre.setVisible(true);
+    JLB_MOVIE33_Rating.setVisible(true);
+    lblMoviePreview33.setVisible(true);
+    
+    JLB_MOVIE34_Name.setVisible(true);
+    JLB_MOVIE34_YearGenre.setVisible(true);
+    JLB_MOVIE34_Rating.setVisible(true);
+    lblMoviePreview34.setVisible(true);
+    
+    JLB_MOVIE35_Name.setVisible(true);
+    JLB_MOVIE35_YearGenre.setVisible(true);
+    JLB_MOVIE35_Rating.setVisible(true);
+    lblMoviePreview35.setVisible(true);  
+    
+}
+
+    private void JBTN_NextPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_NextPageActionPerformed
+        // add 1 to the current page
+        currentPage++;
+    
+        // Fetch and display the movies for the new page
+        fetchAndDisplayMovies(currentFilter); // Use the current filter
+
+        jScrollPane1.getVerticalScrollBar().setValue(0); // Scroll upfetchAndDisplayMovies
+        updatePaginationButtons();
+    }//GEN-LAST:event_JBTN_NextPageActionPerformed
+
+    private void JBTN_PrevPageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_PrevPageActionPerformed
+        // reduct the current page only if it's greater than 1
+        if (currentPage > 1) {
+        currentPage--;
+        // Fetch and display the movies for the new page
+        fetchAndDisplayMovies(currentFilter); // Use the current filter
+
+        jScrollPane1.getVerticalScrollBar().setValue(0); // Scroll to the top
+}   else {
+    
+            System.out.println("Already on the first page");
+}
+    }//GEN-LAST:event_JBTN_PrevPageActionPerformed
 
     /**
      * @param args the command line arguments
