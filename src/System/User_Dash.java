@@ -11,6 +11,10 @@ import java.awt.Image;                             //classes required for croppi
 import java.awt.image.BufferedImage;
 import java.awt.image.CropImageFilter;
 import java.awt.image.FilteredImageSource;
+import java.util.List; // filter custom 
+import java.util.ArrayList;
+import java.util.Calendar;// to get the curreent calendar 
+import javax.swing.JOptionPane;
 
 
 
@@ -25,6 +29,7 @@ public class User_Dash extends javax.swing.JFrame {
     private int currentPage = 1;  // Keeps track of the current page
     private int recordsPerPage = 35;  // Number of records to show per page
     private MovieFilter currentFilter; // pagination with filters
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);//current year for filter validation
 
 
     public User_Dash() {
@@ -42,6 +47,7 @@ public class User_Dash extends javax.swing.JFrame {
         movieFilter.setFilterMavenCinema(false); // Or true, depending on your need
         fetchAndDisplayMovies(movieFilter);
     }
+    
     
     //argument moviefilter  method is used apply various filters based on the properties set in the MovieFilter object
     private void fetchAndDisplayMovies(MovieFilter movieFilter) {
@@ -87,13 +93,69 @@ public class User_Dash extends javax.swing.JFrame {
             
             // Updated the SQL query to fetch based on the pagination variables-calculation based on currentPage and recordsPerPage.
             //The LIMIT clause now has two arguments-- first argument specifies the starting point, and the second argument specifies the number ofrecords to retrieve.
-            StringBuilder sql = new StringBuilder("SELECT * FROM all_movies_db");
-        
-            // If the Maven Cinema filter is enabled, add it to the query
-            if (movieFilter.getFilterMavenCinema()) {
-            sql.append(" WHERE Maven_Cinema_Activity = 'YES'");
-            }
+            StringBuilder sql = new StringBuilder("SELECT * FROM all_movies_db WHERE 1=1");  // Always true condition to simplify appending
 
+            
+            // For Maven Cinema filter
+            if (movieFilter.getFilterMavenCinema()) {
+            sql.append(" AND Maven_Cinema_Activity = 'YES'");
+}
+// For Genre filter
+if (movieFilter.getGenres() != null && !movieFilter.getGenres().isEmpty()) {
+    sql.append(" AND (");
+    for (int i = 0; i < movieFilter.getGenres().size(); i++) {
+        sql.append("FIND_IN_SET('").append(movieFilter.getGenres().get(i)).append("', mov_genre_db) > 0");
+        if (i < movieFilter.getGenres().size() - 1) {
+            sql.append(" OR ");
+        }
+    }
+    sql.append(")");
+}
+
+             // For Maven Rating filter
+             if (movieFilter.getMinMavenRating() >= 0) {
+                sql.append(" AND mov_rating_db >= ").append(movieFilter.getMinMavenRating());
+}
+
+
+            // For Content Rating filter
+            if (movieFilter.getContentRatings() != null && !movieFilter.getContentRatings().isEmpty()) {
+                sql.append(" AND Content_Rating_db IN (");
+                for (int i = 0; i < movieFilter.getContentRatings().size(); i++) {
+            sql.append("'").append(movieFilter.getContentRatings().get(i)).append("'");
+            if (i < movieFilter.getContentRatings().size() - 1) {
+                sql.append(", ");
+        }
+    }
+    sql.append(")");
+}
+
+        
+                       
+            // New Releases filter
+            if (movieFilter.getFilterNewReleases()) {
+                if (sql.toString().contains("WHERE")) { 
+                    sql.append(" AND mov_year_db >= 2020");
+                } else {
+                    sql.append(" WHERE mov_year_db >= 2020");
+    }
+}
+
+// sorting by year for New Releases filter
+if (movieFilter.getFilterNewReleases()) {
+    sql.append(" ORDER BY mov_year_db DESC");
+}
+
+            // If the Top Maven Ratings filter is enabled, add it to the query
+            if (movieFilter.getFilterTopMavenRatings()) {
+                if (sql.toString().contains("WHERE")) {
+                    sql.append(" AND mov_rating_db > 4.9");
+            } else {
+                sql.append(" WHERE mov_rating_db > 4.9");
+    }
+    sql.append(" ORDER BY mov_rating_db DESC");
+}
+            
             sql.append(" LIMIT ").append(startRecord).append(", ").append(recordsPerPage);
             
             ResultSet rs = stmt.executeQuery(sql.toString());
@@ -502,7 +564,6 @@ public class User_Dash extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel_MadeForYou = new javax.swing.JPanel();
         jPanel_Filter = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jCheckBox_GENRE_Action = new javax.swing.JCheckBox();
@@ -525,26 +586,26 @@ public class User_Dash extends javax.swing.JFrame {
         jCheckBox_GENRE_Horror = new javax.swing.JCheckBox();
         jCheckBox_GENRE_Musical = new javax.swing.JCheckBox();
         jCheckBox_GENRE_Western = new javax.swing.JCheckBox();
-        jSlider1 = new javax.swing.JSlider();
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel20 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
-        jCheckBox3 = new javax.swing.JCheckBox();
-        jCheckBox4 = new javax.swing.JCheckBox();
-        jCheckBox5 = new javax.swing.JCheckBox();
-        jButton1 = new javax.swing.JButton();
+        jComboBox_MavenRating = new javax.swing.JComboBox<>();
+        jCheckBox_ContentRatingG = new javax.swing.JCheckBox();
+        jCheckBox_ContentRatingPG = new javax.swing.JCheckBox();
+        jCheckBox_ContentRatingR = new javax.swing.JCheckBox();
+        jCheckBoxMavenCinemaActive = new javax.swing.JCheckBox();
+        JBTN_ClearFields = new javax.swing.JButton();
         JBTN_FilterButton = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        JTF_YearFilter_Min = new javax.swing.JTextField();
+        JTF_YearFilter_Max = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
         lblMoviePreview1 = new javax.swing.JLabel();
         JLB_MOVIE1_Name = new javax.swing.JLabel();
         JLB_MOVIE1_YearGenre = new javax.swing.JLabel();
@@ -685,7 +746,7 @@ public class User_Dash extends javax.swing.JFrame {
         JLB_MOVIE35_Name = new javax.swing.JLabel();
         JLB_MOVIE35_YearGenre = new javax.swing.JLabel();
         JLB_MOVIE35_Rating = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        JTF_Searchfield = new javax.swing.JTextField();
         JBTN_SearchButton = new javax.swing.JButton();
         JBTN_PrevPage = new javax.swing.JButton();
         JBTN_NextPage = new javax.swing.JButton();
@@ -773,12 +834,6 @@ public class User_Dash extends javax.swing.JFrame {
         jPanel_Filter.setBackground(new java.awt.Color(51, 51, 51));
         jPanel_Filter.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("FILTER");
-        jPanel_Filter.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 50));
-
         jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("Year");
@@ -787,42 +842,42 @@ public class User_Dash extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setText("Genre");
-        jPanel_Filter.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 50, 30));
+        jPanel_Filter.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 50, 30));
 
         jCheckBox_GENRE_Action.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Action.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Action.setText("Action");
-        jPanel_Filter.add(jCheckBox_GENRE_Action, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Action, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
 
         jCheckBox_GENRE_Drama.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Drama.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Drama.setText("Drama");
-        jPanel_Filter.add(jCheckBox_GENRE_Drama, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 120, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Drama, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, -1, -1));
 
         jCheckBox_GENRE_Mystery.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Mystery.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Mystery.setText("Mystery");
-        jPanel_Filter.add(jCheckBox_GENRE_Mystery, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 120, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Mystery, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, -1, -1));
 
         jCheckBox_GENRE_Adventure.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Adventure.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Adventure.setText("Adventure");
-        jPanel_Filter.add(jCheckBox_GENRE_Adventure, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Adventure, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, -1, -1));
 
         jCheckBox_GENRE_ScienceFiction.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_ScienceFiction.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_ScienceFiction.setText("Science Fiction");
-        jPanel_Filter.add(jCheckBox_GENRE_ScienceFiction, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 240, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_ScienceFiction, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 300, -1, -1));
 
         jCheckBox_GENRE_Romance.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Romance.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Romance.setText("Romance");
-        jPanel_Filter.add(jCheckBox_GENRE_Romance, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 140, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Romance, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, -1, -1));
 
         jCheckBox_GENRE_Family.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Family.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Family.setText("Family");
-        jPanel_Filter.add(jCheckBox_GENRE_Family, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Family, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, -1, -1));
 
         jCheckBox_GENRE_Animation.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Animation.setForeground(new java.awt.Color(255, 255, 255));
@@ -832,68 +887,67 @@ public class User_Dash extends javax.swing.JFrame {
                 jCheckBox_GENRE_AnimationActionPerformed(evt);
             }
         });
-        jPanel_Filter.add(jCheckBox_GENRE_Animation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Animation, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
         jCheckBox_GENRE_Fantasy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Fantasy.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Fantasy.setText("Fantasy");
-        jPanel_Filter.add(jCheckBox_GENRE_Fantasy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 160, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Fantasy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
 
         jCheckBox_GENRE_Biography.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Biography.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Biography.setText("Biography");
-        jPanel_Filter.add(jCheckBox_GENRE_Biography, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 160, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Biography, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, -1, -1));
 
         jCheckBox_GENRE_FilmNoir.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_FilmNoir.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_FilmNoir.setText("Film Noir");
-        jPanel_Filter.add(jCheckBox_GENRE_FilmNoir, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 160, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_FilmNoir, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, -1, -1));
 
         jCheckBox_GENRE_Thriller.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Thriller.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Thriller.setText("Thriller");
-        jPanel_Filter.add(jCheckBox_GENRE_Thriller, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 220, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Thriller, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 280, -1, -1));
 
         jCheckBox_GENRE_Documentary.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Documentary.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Documentary.setText("Documentary");
-        jPanel_Filter.add(jCheckBox_GENRE_Documentary, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Documentary, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, -1, -1));
 
         jCheckBox_GENRE_War.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_War.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_War.setText("War");
-        jPanel_Filter.add(jCheckBox_GENRE_War, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_War, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 240, -1, -1));
 
         jCheckBox_GENRE_Historical.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Historical.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Historical.setText("Historical");
-        jPanel_Filter.add(jCheckBox_GENRE_Historical, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Historical, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 240, -1, -1));
 
         jCheckBox_GENRE_Comedy.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Comedy.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Comedy.setText("Comedy");
-        jPanel_Filter.add(jCheckBox_GENRE_Comedy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Comedy, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jCheckBox_GENRE_Crime.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Crime.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Crime.setText("Crime");
-        jPanel_Filter.add(jCheckBox_GENRE_Crime, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Crime, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 260, -1, -1));
 
         jCheckBox_GENRE_Horror.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Horror.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Horror.setText("Horror");
-        jPanel_Filter.add(jCheckBox_GENRE_Horror, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 200, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Horror, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 260, -1, -1));
 
         jCheckBox_GENRE_Musical.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Musical.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Musical.setText("Musical");
-        jPanel_Filter.add(jCheckBox_GENRE_Musical, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 200, -1, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Musical, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 260, -1, -1));
 
         jCheckBox_GENRE_Western.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jCheckBox_GENRE_Western.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox_GENRE_Western.setText("Western");
-        jPanel_Filter.add(jCheckBox_GENRE_Western, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 220, -1, -1));
-        jPanel_Filter.add(jSlider1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 240, -1));
+        jPanel_Filter.add(jCheckBox_GENRE_Western, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 280, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -923,12 +977,7 @@ public class User_Dash extends javax.swing.JFrame {
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Maven Rating");
-        jPanel_Filter.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 280, 110, 30));
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
-        jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("IMDb Rating");
-        jPanel_Filter.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 330, -1, 30));
+        jPanel_Filter.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 340, 110, 30));
 
         jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel12.setForeground(new java.awt.Color(255, 255, 255));
@@ -940,55 +989,67 @@ public class User_Dash extends javax.swing.JFrame {
         jLabel20.setText("Active on Maven Cinemas ");
         jPanel_Filter.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 450, -1, -1));
 
-        jComboBox1.setBackground(new java.awt.Color(0, 0, 0));
-        jComboBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO SELECTION", "10", "9 AND ABOVE", "8 AND ABOVE", "7 AND ABOVE", "6 AND ABOVE", "5 AND ABOVE", "4 AND ABOVE", "3 AND ABOVE", "2 AND ABOVE", "1 AND ABOVE", "0" }));
-        jPanel_Filter.add(jComboBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 280, 160, 30));
+        jComboBox_MavenRating.setBackground(new java.awt.Color(0, 0, 0));
+        jComboBox_MavenRating.setForeground(new java.awt.Color(255, 255, 255));
+        jComboBox_MavenRating.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO SELECTION", "10", "9 AND ABOVE", "8 AND ABOVE", "7 AND ABOVE", "6 AND ABOVE", "5 AND ABOVE", "4 AND ABOVE", "3 AND ABOVE", "2 AND ABOVE", "1 AND ABOVE", "0" }));
+        jPanel_Filter.add(jComboBox_MavenRating, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 160, 30));
 
-        jComboBox2.setBackground(new java.awt.Color(0, 0, 0));
-        jComboBox2.setForeground(new java.awt.Color(255, 255, 255));
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NO SELECTION", "10", "9 AND ABOVE", "8 AND ABOVE", "7 AND ABOVE", "6 AND ABOVE", "5 AND ABOVE", "4 AND ABOVE", "3 AND ABOVE", "2 AND ABOVE", "1 AND ABOVE" }));
-        jPanel_Filter.add(jComboBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 330, 160, 30));
+        jCheckBox_ContentRatingG.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox_ContentRatingG.setText("G");
+        jPanel_Filter.add(jCheckBox_ContentRatingG, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, -1));
 
-        jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox1.setText("G");
-        jPanel_Filter.add(jCheckBox1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 420, -1, -1));
-
-        jCheckBox2.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox2.setText("PG");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        jCheckBox_ContentRatingPG.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox_ContentRatingPG.setText("PG");
+        jCheckBox_ContentRatingPG.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                jCheckBox_ContentRatingPGActionPerformed(evt);
             }
         });
-        jPanel_Filter.add(jCheckBox2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
+        jPanel_Filter.add(jCheckBox_ContentRatingPG, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 420, -1, -1));
 
-        jCheckBox3.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox3.setText("R");
-        jPanel_Filter.add(jCheckBox3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 420, -1, -1));
+        jCheckBox_ContentRatingR.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBox_ContentRatingR.setText("R");
+        jPanel_Filter.add(jCheckBox_ContentRatingR, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 420, -1, -1));
 
-        jCheckBox4.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox4.setText("NO PREFERENCE");
-        jPanel_Filter.add(jCheckBox4, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 420, 130, -1));
+        jCheckBoxMavenCinemaActive.setForeground(new java.awt.Color(255, 255, 255));
+        jCheckBoxMavenCinemaActive.setText("NOW SHOWING");
+        jPanel_Filter.add(jCheckBoxMavenCinemaActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 130, -1));
 
-        jCheckBox5.setForeground(new java.awt.Color(255, 255, 255));
-        jCheckBox5.setText("NOW SHOWING");
-        jPanel_Filter.add(jCheckBox5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 480, 130, -1));
-
-        jButton1.setBackground(new java.awt.Color(0, 0, 0));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("CLEAR FIELDS");
-        jPanel_Filter.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 130, 30));
+        JBTN_ClearFields.setBackground(new java.awt.Color(0, 0, 0));
+        JBTN_ClearFields.setForeground(new java.awt.Color(255, 255, 255));
+        JBTN_ClearFields.setText("CLEAR FIELDS");
+        JBTN_ClearFields.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_ClearFieldsActionPerformed(evt);
+            }
+        });
+        jPanel_Filter.add(JBTN_ClearFields, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 520, 260, 30));
 
         JBTN_FilterButton.setBackground(new java.awt.Color(255, 255, 51));
         JBTN_FilterButton.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         JBTN_FilterButton.setText("FILTER");
+        JBTN_FilterButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_FilterButtonActionPerformed(evt);
+            }
+        });
         jPanel_Filter.add(JBTN_FilterButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 560, 260, 50));
+        jPanel_Filter.add(JTF_YearFilter_Min, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 80, 150, -1));
+        jPanel_Filter.add(JTF_YearFilter_Max, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 120, 150, -1));
 
-        jButton2.setBackground(new java.awt.Color(0, 0, 0));
-        jButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jButton2.setText("REFRESH LIST");
-        jPanel_Filter.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 520, 120, 30));
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setText("to Max:");
+        jPanel_Filter.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 60, 20));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("FILTER");
+        jPanel_Filter.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 280, 50));
+
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Min:");
+        jPanel_Filter.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 40, 20));
 
         jPanel_MadeForYou.add(jPanel_Filter, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, 280, 630));
 
@@ -1517,13 +1578,18 @@ public class User_Dash extends javax.swing.JFrame {
         JLB_MOVIE35_Rating.setForeground(new java.awt.Color(204, 204, 204));
         jPanel_MadeForYou.add(JLB_MOVIE35_Rating, new org.netbeans.lib.awtextra.AbsoluteConstraints(1120, 2440, 200, 30));
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jPanel_MadeForYou.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 710, 40));
+        JTF_Searchfield.setFont(new java.awt.Font("Segoe UI", 0, 17)); // NOI18N
+        JTF_Searchfield.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        jPanel_MadeForYou.add(JTF_Searchfield, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 80, 710, 40));
 
         JBTN_SearchButton.setBackground(new java.awt.Color(255, 255, 51));
         JBTN_SearchButton.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         JBTN_SearchButton.setText("SEARCH");
+        JBTN_SearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBTN_SearchButtonActionPerformed(evt);
+            }
+        });
         jPanel_MadeForYou.add(JBTN_SearchButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 80, 170, 40));
 
         JBTN_PrevPage.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -1574,11 +1640,33 @@ public class User_Dash extends javax.swing.JFrame {
     }//GEN-LAST:event_JBTN_MavenCinemaMoviesActionPerformed
 
     private void JBTN_TopMavenRatingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_TopMavenRatingsActionPerformed
-        
+         // Create a MovieFilter object and set the Top Maven Ratings filter to true
+        MovieFilter movieFilter = new MovieFilter();
+        movieFilter.setFilterTopMavenRatings(true);
+
+        // Fetch and display the movies with the new filter
+        fetchAndDisplayMovies(movieFilter);
+
+    // Scroll back to the top
+    jScrollPane1.getVerticalScrollBar().setValue(0);
+    
+    // Reset the current page to the first page
+        currentPage = 1; 
     }//GEN-LAST:event_JBTN_TopMavenRatingsActionPerformed
 
     private void JBTN_NewReleasesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_NewReleasesActionPerformed
-        
+    // Create a MovieFilter object and set the New Releases filter to true
+    MovieFilter movieFilter = new MovieFilter();
+    movieFilter.setFilterNewReleases(true);
+
+    // Fetch and display the movies with the new filter
+    fetchAndDisplayMovies(movieFilter);
+
+    // Scroll back to the top
+    jScrollPane1.getVerticalScrollBar().setValue(0);
+    
+    // Reset the current page to the first page
+    currentPage = 1; 
     }//GEN-LAST:event_JBTN_NewReleasesActionPerformed
 
     private void JBTN_WatchlistActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_WatchlistActionPerformed
@@ -1593,9 +1681,9 @@ public class User_Dash extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBox_GENRE_AnimationActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void jCheckBox_ContentRatingPGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox_ContentRatingPGActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_jCheckBox_ContentRatingPGActionPerformed
 
     private void setAllLabelsVisible() {//// Set all your labels to visible here
     
@@ -1801,6 +1889,140 @@ public class User_Dash extends javax.swing.JFrame {
 }
     }//GEN-LAST:event_JBTN_PrevPageActionPerformed
 
+    private void JBTN_FilterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_FilterButtonActionPerformed
+// Get the current year
+    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+    
+    // Initialize movie filter
+    MovieFilter movieFilter = new MovieFilter();
+
+    // Validate and filter by year
+    String minYearStr = JTF_YearFilter_Min.getText().trim();
+    String maxYearStr = JTF_YearFilter_Max.getText().trim();
+    
+    if (!minYearStr.isEmpty()) {
+        int minYear = Integer.parseInt(minYearStr);
+        if (minYear < 1888 || minYear > currentYear + 2) {
+            JOptionPane.showMessageDialog(this, "Minimum year should be between 1888 and " + (currentYear + 2));
+            return;
+        }
+    }
+    
+    if (!maxYearStr.isEmpty()) {
+        int maxYear = Integer.parseInt(maxYearStr);
+        if (maxYear < 1888 || maxYear > currentYear + 2) {
+            JOptionPane.showMessageDialog(this, "Maximum year should be between 1888 and " + (currentYear + 2));
+            return;
+        }
+    }
+    
+    if (!minYearStr.isEmpty() && !maxYearStr.isEmpty()) {
+        int minYear = Integer.parseInt(minYearStr);
+        int maxYear = Integer.parseInt(maxYearStr);
+        if (maxYear <= minYear) {
+            JOptionPane.showMessageDialog(this, "Maximum year should be greater than minimum year.");
+            return;
+        }
+        movieFilter.setMinYear(minYear);
+        movieFilter.setMaxYear(maxYear);
+    }
+    
+    // Genre Filter
+        List<String> selectedGenres = new ArrayList<>();
+        if (jCheckBox_GENRE_Action.isSelected()) selectedGenres.add("Action");
+        if (jCheckBox_GENRE_Drama.isSelected()) selectedGenres.add("Drama");
+        if (jCheckBox_GENRE_Mystery.isSelected()) selectedGenres.add("Mystery");
+        if (jCheckBox_GENRE_Animation.isSelected()) selectedGenres.add("Animation");
+        if (jCheckBox_GENRE_Family.isSelected()) selectedGenres.add("Family");
+        if (jCheckBox_GENRE_Romance.isSelected()) selectedGenres.add("Romance");
+        if (jCheckBox_GENRE_Fantasy.isSelected()) selectedGenres.add("Fantasy");
+        if (jCheckBox_GENRE_Biography.isSelected()) selectedGenres.add("Biography");
+        if (jCheckBox_GENRE_FilmNoir.isSelected()) selectedGenres.add("Film Noir");
+        if (jCheckBox_GENRE_Comedy.isSelected()) selectedGenres.add("Comedy");
+        if (jCheckBox_GENRE_Historical.isSelected()) selectedGenres.add("Historical");
+        if (jCheckBox_GENRE_War.isSelected()) selectedGenres.add("War");
+        if (jCheckBox_GENRE_Crime.isSelected()) selectedGenres.add("Crime");
+        if (jCheckBox_GENRE_Horror.isSelected()) selectedGenres.add("Horror");
+        if (jCheckBox_GENRE_Musical.isSelected()) selectedGenres.add("Musical");
+        if (jCheckBox_GENRE_Adventure.isSelected()) selectedGenres.add("Adventure");
+        if (jCheckBox_GENRE_Western.isSelected()) selectedGenres.add("Western");
+        if (jCheckBox_GENRE_Thriller.isSelected()) selectedGenres.add("Thriller");
+        if (jCheckBox_GENRE_Documentary.isSelected()) selectedGenres.add("Documentary");
+        if (jCheckBox_GENRE_ScienceFiction.isSelected()) selectedGenres.add("Science Fiction");
+
+if (!selectedGenres.isEmpty()) {
+    movieFilter.setGenres(selectedGenres);
+}
+
+    // Maven Rating Filter
+    String mavenRatingSelection = (String) jComboBox_MavenRating.getSelectedItem();
+    if (!"NO SELECTION".equals(mavenRatingSelection)) {
+        // ... do something to set the Maven Rating filter, e.g. parse the selection to a float value
+        float minRating = Float.parseFloat(mavenRatingSelection.split(" ")[0]);  // Assuming the format is "5 AND ABOVE"
+        movieFilter.setMinMavenRating(minRating);
+    }
+
+    // Content Rating Filter
+    List<String> selectedContentRatings = new ArrayList<>();
+    if (jCheckBox_ContentRatingG.isSelected()) selectedContentRatings.add("G");
+    if (jCheckBox_ContentRatingPG.isSelected()) selectedContentRatings.add("PG");
+    if (jCheckBox_ContentRatingR.isSelected()) selectedContentRatings.add("R");
+    if (!selectedContentRatings.isEmpty()) {
+        movieFilter.setContentRatings(selectedContentRatings);
+    }
+
+    // Maven Cinema Filter
+    if (jCheckBoxMavenCinemaActive.isSelected()) {
+        movieFilter.setFilterMavenCinema(true);
+    }
+
+    // Fetch and display the movies with the new filter
+    fetchAndDisplayMovies(movieFilter);
+    }//GEN-LAST:event_JBTN_FilterButtonActionPerformed
+
+    private void JBTN_ClearFieldsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_ClearFieldsActionPerformed
+        // Clear year filter fields
+    JTF_YearFilter_Min.setText("");
+    JTF_YearFilter_Max.setText("");
+
+    // Clear genre checkboxes
+    jCheckBox_GENRE_Action.setSelected(false);
+    jCheckBox_GENRE_Drama.setSelected(false);
+    jCheckBox_GENRE_Mystery.setSelected(false);
+    jCheckBox_GENRE_Animation.setSelected(false);
+    jCheckBox_GENRE_Family.setSelected(false);
+    jCheckBox_GENRE_Romance.setSelected(false);
+    jCheckBox_GENRE_Fantasy.setSelected(false);
+    jCheckBox_GENRE_Biography.setSelected(false);
+    jCheckBox_GENRE_FilmNoir.setSelected(false);
+    jCheckBox_GENRE_Comedy.setSelected(false);
+    jCheckBox_GENRE_Historical.setSelected(false);
+    jCheckBox_GENRE_War.setSelected(false);
+    jCheckBox_GENRE_Crime.setSelected(false);
+    jCheckBox_GENRE_Horror.setSelected(false);
+    jCheckBox_GENRE_Musical.setSelected(false);
+    jCheckBox_GENRE_Adventure.setSelected(false);
+    jCheckBox_GENRE_Western.setSelected(false);
+    jCheckBox_GENRE_Thriller.setSelected(false);
+    jCheckBox_GENRE_Documentary.setSelected(false);
+    jCheckBox_GENRE_ScienceFiction.setSelected(false);
+
+    // Reset Maven Rating drop-down
+    jComboBox_MavenRating.setSelectedIndex(0);
+
+    // Clear rating checkboxes
+    jCheckBox_ContentRatingG.setSelected(false);
+    jCheckBox_ContentRatingPG.setSelected(false);
+    jCheckBox_ContentRatingR.setSelected(false);
+
+    // Clear Maven Cinema checkbox
+    jCheckBoxMavenCinemaActive.setSelected(false);
+    }//GEN-LAST:event_JBTN_ClearFieldsActionPerformed
+
+    private void JBTN_SearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBTN_SearchButtonActionPerformed
+        
+    }//GEN-LAST:event_JBTN_SearchButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1837,6 +2059,7 @@ public class User_Dash extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton JBTN_ClearFields;
     private javax.swing.JButton JBTN_FilterButton;
     private javax.swing.JButton JBTN_Made_For_You;
     private javax.swing.JButton JBTN_MavenCinemaMovies;
@@ -1952,13 +2175,13 @@ public class User_Dash extends javax.swing.JFrame {
     private javax.swing.JLabel JLB_MOVIE9_Name;
     private javax.swing.JLabel JLB_MOVIE9_Rating;
     private javax.swing.JLabel JLB_MOVIE9_YearGenre;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
-    private javax.swing.JCheckBox jCheckBox5;
+    private javax.swing.JTextField JTF_Searchfield;
+    private javax.swing.JTextField JTF_YearFilter_Max;
+    private javax.swing.JTextField JTF_YearFilter_Min;
+    private javax.swing.JCheckBox jCheckBoxMavenCinemaActive;
+    private javax.swing.JCheckBox jCheckBox_ContentRatingG;
+    private javax.swing.JCheckBox jCheckBox_ContentRatingPG;
+    private javax.swing.JCheckBox jCheckBox_ContentRatingR;
     private javax.swing.JCheckBox jCheckBox_GENRE_Action;
     private javax.swing.JCheckBox jCheckBox_GENRE_Adventure;
     private javax.swing.JCheckBox jCheckBox_GENRE_Animation;
@@ -1979,8 +2202,7 @@ public class User_Dash extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox_GENRE_Thriller;
     private javax.swing.JCheckBox jCheckBox_GENRE_War;
     private javax.swing.JCheckBox jCheckBox_GENRE_Western;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JComboBox<String> jComboBox_MavenRating;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1988,18 +2210,17 @@ public class User_Dash extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel_ButtonPanel;
     private javax.swing.JPanel jPanel_Filter;
     private javax.swing.JPanel jPanel_MadeForYou;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSlider jSlider1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblMoviePreview1;
     private javax.swing.JLabel lblMoviePreview10;
     private javax.swing.JLabel lblMoviePreview11;
